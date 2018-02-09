@@ -5,7 +5,7 @@
         <div class="nav-left hero-brand">
           <router-link class="nav-item hero-brand" to="Home">
             <!-- <img src="~assets/logo.svg" :alt="pkginfo.description"> -->
-            Cumulus Health
+            {{ brand.title }}
           </router-link>
         </div>
         <div class="nav-center">
@@ -40,7 +40,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      pkginfo: 'pkg'
+      pkginfo: 'pkg',
+      brand: 'brand'
     })
   }
 }

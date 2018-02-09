@@ -8,6 +8,7 @@
             <p>
               Welcome to Mobile Connect version {{ pkg.version }}.
             </p>
+            <router-link :to="{ name: 'Report', params: { brand: 'health' } }">Cumulus Health</router-link>
           </div>
         </article>
       </div>

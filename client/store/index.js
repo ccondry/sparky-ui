@@ -13,7 +13,26 @@ const store = new Vuex.Store({
   getters,
   modules,
   state: {
-    pkg
+    pkg,
+    brand: {
+      title: 'Cumulus Health'
+    },
+    requestTypes: {
+      'schedule_appointment': 'Schedule an Appointment',
+      'medical_advice': 'Need Advice',
+      'emergency': 'Emergency',
+      'find_physician': 'Find a Physician',
+      'pay_bill': 'Pay Bill',
+      'prescription_refill': 'Refill a Prescription'
+    },
+    contactMethods: {
+      call: 'Call Us',
+      callback: 'Receive a Call Back from Us',
+      chat: 'Chat with Us',
+      email: 'Email Us',
+      text: 'Text Us',
+      video: 'Live Video Assistance'
+    }
   },
   mutations: {}
 })

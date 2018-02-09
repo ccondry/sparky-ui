@@ -13,6 +13,11 @@ export default new Router({
       component: require('../views/Home')
     },
     {
+      name: 'Report',
+      path: '/:email/report',
+      component: require('../views/Report')
+    },
+    {
       path: '*',
       redirect: '/'
     }
