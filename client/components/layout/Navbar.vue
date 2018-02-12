@@ -3,9 +3,9 @@
     <div class="hero-head">
       <nav class="nav">
         <div class="nav-left hero-brand">
-          <router-link class="nav-item hero-brand" to="Home">
+          <router-link class="nav-item hero-brand" :to="{ name: 'Home' }">
             <!-- <img src="~assets/logo.svg" :alt="pkginfo.description"> -->
-            {{ brand.title }}
+            {{ brand.title || 'Mobile Connect' }}
           </router-link>
         </div>
         <div class="nav-center">
@@ -41,8 +41,19 @@ export default {
   computed: {
     ...mapGetters({
       pkginfo: 'pkg',
-      brand: 'brand'
-    })
+      brands: 'brands'
+    }),
+    brandId () {
+      return this.$route.params.brand
+    },
+    language () {
+      return this.$route.params.language
+    },
+    brand () {
+      return this.brands.find(v => {
+        return v.id === this.brandId && v.language === this.language
+      }) || {}
+    }
   }
 }
 </script>

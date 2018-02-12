@@ -54,3 +54,65 @@ export const postData = async function ({getters, commit, dispatch}, options) {
     dispatch('errorNotification', {title: `Failed to POST ${options.name}`, error: e})
   }
 }
+
+export const sendCallData = async function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`sendCallData data`, data)
+    const response = await post(getters, 'mc/call', {}, data)
+    console.log(`sendCallData response`, response)
+    // dispatch('successNotification', `Successfully sent call data`)
+  } catch (error) {
+    console.log(`error sending call data`, error)
+    dispatch('errorNotification', {title: `Failed to send call data`, error})
+  }
+}
+
+export const sendCallbackRequest = async function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`sendCallbackRequest data`, data)
+    const response = await post(getters, 'sm/agent-request', {}, data)
+    console.log(`sendCallbackRequest response`, response)
+    // dispatch('successNotification', `Successfully sent call data`)
+  } catch (error) {
+    console.log(`error sending callback request`, error)
+    dispatch('errorNotification', {title: `Failed to send callback request`, error})
+  }
+}
+
+export const sendEmail = async function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`sendEmail data`, data)
+    const response = await post(getters, 'email/ece', {}, data)
+    console.log(`sendEmail response`, response)
+    // dispatch('successNotification', `Successfully sent call data`)
+  } catch (error) {
+    console.log(`error sending email request`, error)
+    dispatch('errorNotification', {title: `Failed to send email`, error})
+  }
+}
+
+export const shortenUrl = async function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`shortenUrl data`, data)
+    const response = await post(getters, 'link', {}, data)
+    console.log(`shortenUrl response`, response)
+    return response
+    // dispatch('successNotification', `Successfully sent call data`)
+  } catch (error) {
+    console.log(`error getting short URL`, error)
+    // dispatch('errorNotification', {title: `Failed to send email`, error})
+  }
+}
+
+export const uploadImage = async function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`uploadImage data`, data)
+    const response = await post(getters, 'mc/image', {}, data)
+    console.log(`uploadImage response`, response)
+    return response
+    // dispatch('successNotification', `Successfully sent call data`)
+  } catch (error) {
+    console.log(`error uploading image`, error)
+    // dispatch('errorNotification', {title: `Failed to send email`, error})
+  }
+}

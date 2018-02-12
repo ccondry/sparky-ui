@@ -8,18 +8,23 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
-      name: 'Home',
-      path: '/',
-      component: require('../views/Home')
-    },
-    {
-      name: 'Report',
-      path: '/:email/report',
-      component: require('../views/Report')
-    },
-    {
       path: '*',
       redirect: '/'
+    },
+    {
+      name: 'Home',
+      path: '/',
+      component: require('../views/home')
+    },
+    {
+      name: 'Brand Select',
+      path: '/:language',
+      component: require('../views/brand-select')
+    },
+    {
+      name: 'Brand',
+      path: '/:language/:brand',
+      component: require('../views/brand')
     }
   ]
 })
