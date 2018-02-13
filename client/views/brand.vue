@@ -65,7 +65,7 @@
                     <i class="fa" :class="locationLoading ? 'fa-spin fa-spinner' : 'fa-map-marker'"></i>
                   </span>
                   <span class="is-hidden-mobile">{{ locationLoading ? tr.s_finding_current_location : tr.s_use_current_location }}</span>
-                  <span class="is-flex-mobile">{{ locationLoading ? tr.s_mobile_finding_current_location : tr.s_mobile_use_current_location }}</span>
+                  <span class="is-hidden-tablet">{{ locationLoading ? tr.s_mobile_finding_current_location : tr.s_mobile_use_current_location }}</span>
                 </a>
               </p>
               <div v-show="locationType === 'street'">
