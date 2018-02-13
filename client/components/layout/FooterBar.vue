@@ -34,19 +34,8 @@ export default {
 <style lang="scss">
 @import '~bulma/sass/utilities/mixins';
 
+
 .footer {
-  margin-left: 180px;
-
-  @include mobile() {
-    margin-left: 0;
-  }
-
-  .social a {
-    border-bottom: none !important;
-  }
-
-  .fa.fa-heart {
-    color: red;
-  }
+  padding: 1em !important;
 }
 </style>
