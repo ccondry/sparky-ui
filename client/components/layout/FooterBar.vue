@@ -36,6 +36,6 @@ export default {
 
 
 .footer {
-  padding: 1em !important;
+  padding: 2em !important;
 }
 </style>
