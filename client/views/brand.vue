@@ -23,88 +23,90 @@
 
           <br>
           <br>
-
-          <div>
-            <h3 class="title nomargin">{{ tr.description_of_problem }}</h3>
-            <hr>
-            <textarea class="input" v-model="description" style="min-height: 3em; width:100%;" :placeholder="tr.placeholder_description"></textarea>
-          </div>
-
-          <br>
-          <br>
-
-          <div>
-            <h3 class="title nomargin">{{ tr.attach_a_photo }}</h3>
-            <hr>
-            <input type="file" ref="fileElem" @change="changeFileInput" accept="image/*" style="display: none" name="image">
-            <button class="button is-info is-fullwidth" @click="clickAddPhoto"><i class="fa fa-camera pull-left"></i> {{ tr.add_photo }}</button>
-            <img :src="photoSrc" v-if="photoSrc.length" />
-          </div>
-
-          <br>
-          <br>
-
-          <div>
-            <h3 class="title nomargin">{{ tr.add_a_location }}</h3>
-            <hr>
-            <p class="control has-addons">
-              <a class="button" :class="locationType === 'street' ? 'is-primary' : ''" @click.prevent="locationType = 'street'">
-                <span class="icon is-small">
-                  <i class="fa fa-road"></i>
-                </span>
-                <span>{{ tr.s_street }} {{ tr.s_address }}</span>
-              </a>
-              <a class="button" :class="locationType === 'intersection' ? 'is-primary' : ''" @click.prevent="locationType = 'intersection'">
-                <span class="icon is-small">
-                  <i class="fa fa-plus"></i>
-                </span>
-                <span>{{ tr.s_intersection }}</span>
-              </a>
-              <a class="button" :class="gpsButtonClass" @click.prevent="locationType = 'gps'; getLocation()">
-                <span class="icon is-small">
-                  <i class="fa" :class="locationLoading ? 'fa-spin fa-spinner' : 'fa-map-marker'"></i>
-                </span>
-                <span>{{ locationLoading ? 'Locating you now...' : tr.s_use_current_location }}</span>
-              </a>
-            </p>
-            <div v-show="locationType === 'street'">
-              <input class="input" v-model="streetAddress" :placeholder="tr.placeholder_street_address">
+          <div v-show="requestType">
+            <div>
+              <h3 class="title nomargin">{{ tr.description_of_problem }}</h3>
+              <hr>
+              <textarea class="input" v-model="description" style="min-height: 3em; width:100%;" :placeholder="tr.placeholder_description"></textarea>
             </div>
-            <div v-show="locationType === 'intersection'">
-              <input class="input" v-model="intersection1" :placeholder="tr.placeholder_intersection_1">
-              <input class="input" v-model="intersection2" :placeholder="tr.placeholder_intersection_2">
-            </div>
-          </div>
 
-          <br>
+            <br>
+            <br>
 
-          <div>
-            <h3 class="title nomargin">{{ tr.h_contact }}</h3>
-            <hr>
-            <div class="select is-fullwidth">
-              <select v-model="contactMethod">
-                <option selected disabled value="">{{ tr.o_select_contact_method }}</option>
-                <option v-for="(method, key) in contactMethods" :value="key">{{ method.text }}</option>
-              </select>
+            <div>
+              <h3 class="title nomargin">{{ tr.attach_a_photo }}</h3>
+              <hr>
+              <input type="file" ref="fileElem" @change="changeFileInput" accept="image/*" style="display: none" name="image">
+              <button class="button is-info is-fullwidth" @click="clickAddPhoto"><i class="fa fa-camera pull-left"></i> {{ tr.add_photo }}</button>
+              <img :src="photoSrc" v-if="photoSrc.length" />
             </div>
-            <div v-if="contactMethod">
-              <div v-show="!['sms'].includes(contactMethod)">
-                {{ tr.enter_your_name }}
-                <input class="input" v-model="name" :placeholder="tr.placeholder_caller_name">
+
+            <br>
+            <br>
+
+            <div>
+              <h3 class="title nomargin">{{ tr.add_a_location }}</h3>
+              <hr>
+              <p class="control has-addons">
+                <a class="button" :class="locationType === 'street' ? 'is-primary' : ''" @click.prevent="locationType = 'street'">
+                  <span class="icon is-small">
+                    <i class="fa fa-road"></i>
+                  </span>
+                  <span class="is-hidden-mobile">{{ tr.s_street }}</span> <span>{{ tr.s_address }}</span>
+                </a>
+                <a class="button" :class="locationType === 'intersection' ? 'is-primary' : ''" @click.prevent="locationType = 'intersection'">
+                  <span class="icon is-small">
+                    <i class="fa fa-plus"></i>
+                  </span>
+                  <span>{{ tr.s_intersection }}</span>
+                </a>
+                <a class="button" :class="gpsButtonClass" @click.prevent="locationType = 'gps'; getLocation()">
+                  <span class="icon is-small">
+                    <i class="fa" :class="locationLoading ? 'fa-spin fa-spinner' : 'fa-map-marker'"></i>
+                  </span>
+                  <span class="is-hidden-mobile">{{ locationLoading ? tr.s_finding_current_location : tr.s_use_current_location }}</span>
+                  <span class="is-flex-mobile">{{ locationLoading ? tr.s_mobile_finding_current_location : tr.s_mobile_use_current_location }}</span>
+                </a>
+              </p>
+              <div v-show="locationType === 'street'">
+                <input class="input" v-model="streetAddress" :placeholder="tr.placeholder_street_address">
               </div>
-              <div v-show="!['sms', 'email'].includes(contactMethod)">
-                {{ tr.enter_your_phone }}
-                <input class="input" v-model="ani" :placeholder="tr.placeholder_caller_number">
+              <div v-show="locationType === 'intersection'">
+                <input class="input" v-model="intersection1" :placeholder="tr.placeholder_intersection_1">
+                <input class="input" v-model="intersection2" :placeholder="tr.placeholder_intersection_2">
               </div>
-              <div v-show="['chat', 'email'].includes(contactMethod)">
-                {{ tr.enter_your_email }}
-                <input class="input" v-model="email" :placeholder="tr.placeholder_caller_email">
-              </div>
-              <br>
-              <button class="button is-success is-fullwidth" :class="working ? 'is-loading' : ''" @click="submit" :disabled="working"><i class="pull-left" :class="contactMethods[contactMethod].icon"></i> {{ contactMethods[contactMethod].text }}</button>
             </div>
-          </div>
 
+            <br>
+
+            <div>
+              <h3 class="title nomargin">{{ tr.h_contact }}</h3>
+              <hr>
+              <div class="select is-fullwidth">
+                <select v-model="contactMethod">
+                  <option selected disabled value="">{{ tr.o_select_contact_method }}</option>
+                  <option v-for="(method, key) in contactMethods" :value="key">{{ method.text }}</option>
+                </select>
+              </div>
+              <div v-if="contactMethod">
+                <div v-show="!['sms'].includes(contactMethod)">
+                  {{ tr.enter_your_name }}
+                  <input class="input" v-model="name" :placeholder="tr.placeholder_caller_name">
+                </div>
+                <div v-show="!['sms', 'email'].includes(contactMethod)">
+                  {{ tr.enter_your_phone }}
+                  <input class="input" v-model="ani" :placeholder="tr.placeholder_caller_number">
+                </div>
+                <div v-show="['chat', 'email'].includes(contactMethod)">
+                  {{ tr.enter_your_email }}
+                  <input class="input" v-model="email" :placeholder="tr.placeholder_caller_email">
+                </div>
+                <br>
+                <button class="button is-success is-fullwidth" :class="working ? 'is-loading' : ''" @click="submit" :disabled="working || !submitIsEnabled"><i class="pull-left" :class="contactMethods[contactMethod].icon"></i> {{ contactMethods[contactMethod].text }}</button>
+              </div>
+            </div>
+
+          </div>
         </article>
       </div>
 
@@ -153,6 +155,26 @@ export default {
       'language',
       'localizations'
     ]),
+    submitIsEnabled () {
+      switch (this.contactMethod) {
+        case 'call': return this.validateAni
+        case 'callback': return this.validateAni
+        case 'sms': return true
+        case 'chat': return this.validateAni && this.validateEmail
+        case 'email': return this.validateEmail
+        case 'video': return this.validateAni
+      }
+    },
+    validateAni () {
+      // numbers only
+      const searchRegex = new RegExp(/^\d+$/)
+      return searchRegex.test(this.ani) && this.ani.length
+    },
+    validateEmail () {
+      // email address
+      const searchRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+      return searchRegex.test(this.email)
+    },
     gpsButtonClass () {
       let c = ''
       if (this.locationType === 'gps') {
@@ -217,12 +239,6 @@ export default {
       }
     },
     variables: function () {
-      // var v = [
-      //   {
-      //     name: 'user_user.id',
-      //     value: String(this.userid) // make sure this stays a string
-      //   }
-      // ]
       // add call variables
       let v = []
       for (let i = 0; i < 10; i++) {
@@ -248,34 +264,30 @@ export default {
         '',
         ''
       ]
-      // cv1: ani,
-      //     cv2: this.name,
-      //     cv5: this.requestType,
-      //     cv6: this.brand,
-      //     cv9: this.language,
-      //     cv10: `${this.latitude}, ${this.longitude}`
     }
   },
   watch: {
-    // locationType (val, oldVal) {
-    //   if (val === 'gps') {
-    //     this.getLocation()
-    //   }
-    // }
+    requestType (val, oldVal) {
+      // scroll to bottom of page when request type is first selected
+      console.log('request type changed')
+      if (oldVal === '') {
+        this.$nextTick(function () {
+          this.$scrollTo('#footer', 1000)
+        })
+      }
+    },
     contactMethod (val, oldVal) {
-      // scroll to bottom of page when content changes
+      // scroll to bottom of page when contact method changes
       console.log('contact method changed')
       this.$nextTick(function () {
         this.$scrollTo('#footer', 1000)
-        // window.scrollTo(0, document.body.scrollHeight)
       })
     },
     photoSrc (val, oldVal) {
-      // scroll to bottom of page when content changes
+      // scroll to bottom of page when photo is attached
       console.log('photo src changed')
       this.$nextTick(function () {
         this.$scrollTo('#footer', 1000)
-        // window.scrollTo(0, document.body.scrollHeight)
       })
     }
   },
