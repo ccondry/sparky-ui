@@ -10,6 +10,7 @@
 <script>
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import { Navbar, AppMain, FooterBar } from 'components/layout/'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -17,6 +18,12 @@ export default {
     AppMain,
     FooterBar,
     NprogressContainer
+  },
+  mounted () {
+    this.loadBrands()
+  },
+  methods: {
+    ...mapActions(['loadBrands'])
   }
 }
 </script>

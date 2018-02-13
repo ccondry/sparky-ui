@@ -42,10 +42,30 @@ const getters = {
 const mutations = {
   [types.SET_BRANDS] (state, data) {
     state.brands = data
+  },
+  [types.SET_REQUEST_TYPES] (state, data) {
+    state.requestTypes = data
   }
 }
 
 const actions = {
+  async loadBrands ({dispatch}, showNotification = true) {
+    dispatch('loadToState', {
+      name: 'brands',
+      path: 'mc/brands',
+      mutation: types.SET_BRANDS,
+      showNotification
+    })
+  },
+  async loadRequestTypes ({dispatch}, {brand, showNotification = true}) {
+    dispatch('loadToState', {
+      name: 'request types',
+      path: 'mc/request-types',
+      query: {brand},
+      mutation: types.SET_REQUEST_TYPES,
+      showNotification
+    })
+  }
 }
 
 export default {

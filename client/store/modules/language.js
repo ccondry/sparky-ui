@@ -9,6 +9,7 @@ const state = {
   },
   localizations: {
     'en': {
+      'loading': 'Loading...',
       'title': 'Contact Us',
       'subtitle': 'How Can We Help?',
       'choose_demo': 'Choose Your Demo Brand',
@@ -61,6 +62,7 @@ const state = {
       's_video_us': 'Live Video Assistance'
     },
     'es': {
+      'loading': 'Cargando...',
       'title': 'Contáctenos',
       'subtitle': '¿Cómo podemos ayudarle?',
       'choose_demo': 'Elija su marca de demostración',

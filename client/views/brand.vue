@@ -15,7 +15,7 @@
             <hr>
             <div class="select is-fullwidth">
               <select v-model="requestType">
-                <option selected disabled value="">{{ tr.o_select_category }}</option>
+                <option selected disabled value="">{{ requestTypesLoading ? tr.loading : tr.o_select_category }}</option>
                 <option v-for="(requestType, key) in requestTypes" :value="key">{{ requestType }}</option>
               </select>
             </div>
@@ -151,10 +151,12 @@ export default {
       working: false,
       feedId: '100020',
       imgUrl: null,
-      randomId: ''
+      randomId: '',
+      requestTypesLoading: false
     }
   },
   mounted () {
+    this.getRequestTypes()
     // this.getBrand(this.email)
     this.getLocation()
     // generate random ID for this session, if phone number is not used
@@ -298,6 +300,10 @@ export default {
     }
   },
   watch: {
+    brand (val, oldVal) {
+      // brand was changed - reload the request types
+      this.getRequestTypes()
+    },
     requestType (val, oldVal) {
       // scroll to description (using question-type div) when request type is
       // first selected
@@ -331,8 +337,19 @@ export default {
       'sendEmail',
       'shortenUrl',
       'uploadImage',
-      'openChat'
+      'openChat',
+      'loadRequestTypes'
     ]),
+    async getRequestTypes () {
+      this.requestTypesLoading = true
+      try {
+        await this.loadRequestTypes({brand: this.brand, showNotification: false})
+      } catch (e) {
+        // continue
+      } finally {
+        this.requestTypesLoading = false
+      }
+    },
     getLocation () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition)
