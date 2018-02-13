@@ -237,16 +237,16 @@ export default {
     },
     cvs () {
       return [
-        this.ani,
         this.name,
-        '',
-        '',
-        this.requestType,
-        this.brand,
-        '',
-        '',
+        `${this.latitude}, ${this.longitude}`,
         this.language,
-        `${this.latitude}, ${this.longitude}`
+        '',
+        '',
+        this.email,
+        this.brand,
+        this.requestType,
+        '',
+        ''
       ]
       // cv1: ani,
       //     cv2: this.name,
