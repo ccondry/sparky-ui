@@ -503,9 +503,9 @@ export default {
       return message
     },
     async getHtmlMessage () {
-      let message = `${this.requestTypes[this.requestType]} at ${this.latitude}, ${this.longitude}`
+      let message = `Request: ${this.requestTypes[this.requestType]} at ${this.latitude}, ${this.longitude}`
       // add description to message
-      message += `\r\n${this.description}`
+      message += `<br><br>Description: ${this.description}`
       // try to add shortened URL for image
       try {
         if (this.imgUrl) {
@@ -514,7 +514,7 @@ export default {
           console.log('got short URL:', shortUrl)
           // add image to message, if one was set and a valid short URL returned
           if (shortUrl) {
-            message += `\r\n<img src="${shortUrl}">`
+            message += `<br><br><img src="${shortUrl}">`
           }
         }
       } catch (error) {
