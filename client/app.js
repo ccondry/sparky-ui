@@ -12,7 +12,20 @@ import * as filters from './filters'
 
 Vue.router = router
 Vue.use(NProgress)
+// moment.js filters
 Vue.use(require('vue-moment'))
+// smooth scrolling
+Vue.use(require('vue-scrollto'), {
+  container: 'body',
+  duration: 500,
+  easing: 'ease',
+  offset: 0,
+  cancelable: true,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
+})
 // Enable devtools
 Vue.config.devtools = true
 

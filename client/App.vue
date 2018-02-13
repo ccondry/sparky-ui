@@ -3,7 +3,7 @@
     <nprogress-container></nprogress-container>
     <navbar :show="true"></navbar>
     <app-main></app-main>
-    <!-- <footer-bar></footer-bar> -->
+    <footer-bar></footer-bar>
   </div>
 </template>
 

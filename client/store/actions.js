@@ -73,6 +73,11 @@ export const sendCallbackRequest = async function ({getters, commit, dispatch}, 
     const response = await post(getters, 'sm/agent-request', {}, data)
     console.log(`sendCallbackRequest response`, response)
     // dispatch('successNotification', `Successfully sent call data`)
+    dispatch('notification', {
+      title: 'Callback Request Scheduled',
+      message: 'An agent will be calling you in approximately 2 minutes.',
+      type: 'success'
+    })
   } catch (error) {
     console.log(`error sending callback request`, error)
     dispatch('errorNotification', {title: `Failed to send callback request`, error})
@@ -94,7 +99,7 @@ export const sendEmail = async function ({getters, commit, dispatch}, data) {
 export const shortenUrl = async function ({getters, commit, dispatch}, data) {
   try {
     console.log(`shortenUrl data`, data)
-    const response = await post(getters, 'link', {}, data)
+    const response = await post(getters, 'link', {}, {longUrl: data})
     console.log(`shortenUrl response`, response)
     return response
     // dispatch('successNotification', `Successfully sent call data`)
@@ -113,6 +118,28 @@ export const uploadImage = async function ({getters, commit, dispatch}, data) {
     // dispatch('successNotification', `Successfully sent call data`)
   } catch (error) {
     console.log(`error uploading image`, error)
+    // dispatch('errorNotification', {title: `Failed to send email`, error})
+  }
+}
+
+export const openChat = function ({getters, commit, dispatch}, data) {
+  try {
+    console.log(`open chat`, data)
+    // data.name
+    // data.email
+    // data.ani
+    // data.message
+    const template = 'kiwi'
+    const entryPointId = '1002'
+    const locale = 'en-US'
+    // https://ece2.cxdemo.net/system/templates/chat/kiwi/chat.html?subActivity=Chat&entryPointId=1006&templateName=kiwi_alto&languageCode=en&countryCode=US&ver=v11
+    let url = `https://ece2.cxdemo.net/system/templates/chat/${template}/chat.html`
+    url += `?subActivity=Chat&entryPointId=${entryPointId}&templateName=${template}&languageCode=${locale.split('-')[0]}&countryCode=${locale.split('-')[1]}&ver=v11`
+    url += `&fieldname1=${encodeURIComponent(data.name)}&fieldname2=${data.email}&fieldname3=${data.ani}&fieldname4=${data.message}`
+    // window.location = url
+    window.open(url, '_blank', 'width=400,height=600')
+  } catch (error) {
+    console.log(`error opening chat`, error)
     // dispatch('errorNotification', {title: `Failed to send email`, error})
   }
 }

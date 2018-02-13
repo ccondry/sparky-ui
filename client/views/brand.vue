@@ -88,15 +88,15 @@
               </select>
             </div>
             <div v-if="contactMethod">
-              <div v-show="!['email', 'sms'].includes(contactMethod)">
+              <div v-show="!['sms'].includes(contactMethod)">
                 {{ tr.enter_your_name }}
                 <input class="input" v-model="name" :placeholder="tr.placeholder_caller_name">
               </div>
-              <div v-show="!['email', 'sms'].includes(contactMethod)">
+              <div v-show="!['sms', 'email'].includes(contactMethod)">
                 {{ tr.enter_your_phone }}
                 <input class="input" v-model="ani" :placeholder="tr.placeholder_caller_number">
               </div>
-              <div v-show="['chat'].includes(contactMethod)">
+              <div v-show="['chat', 'email'].includes(contactMethod)">
                 {{ tr.enter_your_email }}
                 <input class="input" v-model="email" :placeholder="tr.placeholder_caller_email">
               </div>
@@ -136,7 +136,8 @@ export default {
       locationLoading: false,
       dnis: '9194745516',
       working: false,
-      feedId: '100020'
+      feedId: '100020',
+      imgUrl: null
     }
   },
   mounted () {
@@ -201,6 +202,58 @@ export default {
     },
     brand () {
       return this.$route.params.brand
+    },
+    formData () {
+      return {
+        feedId: this.feedId,
+        contact: {
+          name: this.name,
+          title: this.requestTypes[this.requestType],
+          description: this.description,
+          mediaAddress: this.ani,
+          tags: this.tags,
+          variables: this.variables
+        }
+      }
+    },
+    variables: function () {
+      // var v = [
+      //   {
+      //     name: 'user_user.id',
+      //     value: String(this.userid) // make sure this stays a string
+      //   }
+      // ]
+      // add call variables
+      let v = []
+      for (let i = 0; i < 10; i++) {
+        if (this.cvs[i].length) {
+          v.push({
+            name: 'cv_' + (i + 1),
+            value: this.cvs[i]
+          })
+        }
+      }
+      return v
+    },
+    cvs () {
+      return [
+        this.ani,
+        this.name,
+        '',
+        '',
+        this.requestType,
+        this.brand,
+        '',
+        '',
+        this.language,
+        `${this.latitude}, ${this.longitude}`
+      ]
+      // cv1: ani,
+      //     cv2: this.name,
+      //     cv5: this.requestType,
+      //     cv6: this.brand,
+      //     cv9: this.language,
+      //     cv10: `${this.latitude}, ${this.longitude}`
     }
   },
   watch: {
@@ -209,6 +262,22 @@ export default {
     //     this.getLocation()
     //   }
     // }
+    contactMethod (val, oldVal) {
+      // scroll to bottom of page when content changes
+      console.log('contact method changed')
+      this.$nextTick(function () {
+        this.$scrollTo('#footer', 1000)
+        // window.scrollTo(0, document.body.scrollHeight)
+      })
+    },
+    photoSrc (val, oldVal) {
+      // scroll to bottom of page when content changes
+      console.log('photo src changed')
+      this.$nextTick(function () {
+        this.$scrollTo('#footer', 1000)
+        // window.scrollTo(0, document.body.scrollHeight)
+      })
+    }
   },
   methods: {
     ...mapActions([
@@ -217,7 +286,8 @@ export default {
       'sendCallbackRequest',
       'sendEmail',
       'shortenUrl',
-      'uploadImage'
+      'uploadImage',
+      'openChat'
     ]),
     getLocation () {
       if (navigator.geolocation) {
@@ -291,6 +361,11 @@ export default {
       // wait for uploads to resolve
       try {
         await Promise.all([p1, p2])
+        // save image long URL
+        // this.imgUrl = `https://link.cxdemo.net/`
+        if (this.ani) {
+          this.imgUrl = `https://toolbox-dev.cxdemo.net/api/v5/mc/image/${this.ani}`
+        }
         this.working = false
         switch (this.contactMethod) {
           case 'call': this.startCall(); break
@@ -312,34 +387,9 @@ export default {
       console.log('start call')
       window.location = 'tel:' + this.dnis
     },
-    async startCallback () {
+    startCallback () {
       console.log('start callback')
-      let params = {
-        // TODO fix format
-        // instance: config.instance,
-        feedId: this.feedId,
-        mediaAddress: this.ani,
-        name: this.name,
-        title: this.title,
-        description: this.description,
-        // cv1: ani,
-        cv2: this.name,
-        cv5: this.requestType,
-        cv6: this.brand,
-        cv9: this.language,
-        cv10: `${this.latitude}, ${this.longitude}`
-        // userid: QueryString.uui
-      }
-      try {
-        await this.sendCallbackRequest(params)
-        this.notification({
-          title: 'Callback Request Scheduled',
-          message: 'An agent will be calling you in approximately 2 minutes.',
-          type: 'success'
-        })
-      } catch (error) {
-        console.log(error)
-      }
+      this.sendCallbackRequest(this.formData)
     },
     async startSms () {
       console.log('start sms')
@@ -353,20 +403,24 @@ export default {
       console.log('start chat')
       const message = await this.getMessage()
       console.log('opening the chat window')
-      this.openChat(this.name, this.email, this.ani, message)
+      this.openChat({
+        name: this.name,
+        email: this.email,
+        ani: this.ani,
+        message
+      })
     },
     async startEmail () {
       console.log('start email')
       const message = await this.getMessage()
       const mailOptions = {
-        from: `"${this.name || ''}" <${this.email}>`, // sender address
-        // to: req.body.to ? `${req.body.to}@dcloud.cisco.com` : process.env.email_to_egain, // list of receivers
+        name: this.name,
+        email: this.email,
         subject: this.requestTypes[this.requestType], // Subject line
         text: message // plain text body
-        // html: req.body.html || '' // html body
       }
       try {
-        await this.sendEmail({mailOptions})
+        await this.sendEmail(mailOptions)
         this.notification({
           title: 'Email sent',
           message: 'An agent will respond to your email in 10-20 minutes.',
@@ -384,11 +438,14 @@ export default {
     async getMessage () {
       let message = `${this.requestTypes[this.requestType]} at ${this.latitude}, ${this.longitude}`
       try {
-        const shortUrl = await this.shortenUrl(this.imgUrl)
-        console.log('got short URL:', shortUrl)
-        // add image to message, if one was set and a valid short URL returned
-        if (shortUrl) {
-          message += `\r\nimage: ${shortUrl}`
+        if (this.imgUrl) {
+          const response = await this.shortenUrl(this.imgUrl)
+          const shortUrl = response.data.link
+          console.log('got short URL:', shortUrl)
+          // add image to message, if one was set and a valid short URL returned
+          if (shortUrl) {
+            message += `\r\nimage: ${shortUrl}`
+          }
         }
       } catch (error) {
         console.log(error)
