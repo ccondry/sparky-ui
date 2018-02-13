@@ -10,7 +10,7 @@
 
           <p class="subtitle">{{ tr.subtitle }}</p>
 
-          <div>
+          <div id="question-type">
             <h2 class="title nomargin">{{ tr.type_of_question }}</h2>
             <hr>
             <div class="select is-fullwidth">
@@ -25,7 +25,7 @@
           <br>
           <div v-show="requestType">
             <div>
-              <h3 class="title nomargin">{{ tr.description_of_problem }}</h3>
+              <h3 class="title nomargin" id="description">{{ tr.description_of_problem }}</h3>
               <hr>
               <textarea class="input" v-model="description" style="min-height: 3em; width:100%;" :placeholder="tr.placeholder_description"></textarea>
             </div>
@@ -275,6 +275,11 @@ export default {
           })
         }
       }
+      // add call variable layout setting
+      v.push({
+        name: 'user_user.Layout',
+        value: 'Mobile Connect'
+      })
       return v
     },
     cvs () {
@@ -294,11 +299,12 @@ export default {
   },
   watch: {
     requestType (val, oldVal) {
-      // scroll to bottom of page when request type is first selected
+      // scroll to description (using question-type div) when request type is
+      // first selected
       console.log('request type changed')
       if (oldVal === '') {
         this.$nextTick(function () {
-          this.$scrollTo('#footer', 1000)
+          this.$scrollTo('#question-type', 1000)
         })
       }
     },
@@ -453,15 +459,13 @@ export default {
     async startEmail () {
       console.log('start email')
       // const message = await this.getMessage()
-      let message = `Need Advice at 32.9700805, -96.67821269999999
-image: <img src="https://link.cxdemo.net/ZosyHR">
-adsf`
+      const htmlMessage = await this.getHtmlMessage()
       const mailOptions = {
         name: this.name,
         email: this.email,
         subject: this.requestTypes[this.requestType], // Subject line
-        // text: message // plain text body
-        html: message // html body
+        // text: message, // plain text body
+        html: htmlMessage // html body
       }
       try {
         await this.sendEmail(mailOptions)
@@ -496,6 +500,26 @@ adsf`
       }
       // add description to message
       message += `\r\n${this.description}`
+      return message
+    },
+    async getHtmlMessage () {
+      let message = `${this.requestTypes[this.requestType]} at ${this.latitude}, ${this.longitude}`
+      // add description to message
+      message += `\r\n${this.description}`
+      // try to add shortened URL for image
+      try {
+        if (this.imgUrl) {
+          const response = await this.shortenUrl(this.imgUrl)
+          const shortUrl = response.data.link
+          console.log('got short URL:', shortUrl)
+          // add image to message, if one was set and a valid short URL returned
+          if (shortUrl) {
+            message += `\r\n<img src="${shortUrl}">`
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
       return message
     }
   }
