@@ -208,7 +208,7 @@ export default {
         feedId: this.feedId,
         contact: {
           name: this.name,
-          title: this.requestTypes[this.requestType],
+          title: this.requestTypes[this.requestType] || this.tr.title || 'Mobile Connect',
           description: this.description,
           mediaAddress: this.ani,
           tags: this.tags,
