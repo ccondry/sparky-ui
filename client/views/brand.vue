@@ -95,7 +95,7 @@
                 </div>
                 <div v-show="!['sms', 'email'].includes(contactMethod)">
                   {{ tr.enter_your_phone }}
-                  <input class="input" v-model="ani" :placeholder="tr.placeholder_caller_number">
+                  <input class="input" v-model="phone" :placeholder="tr.placeholder_caller_number">
                 </div>
                 <div v-show="['chat', 'email'].includes(contactMethod)">
                   {{ tr.enter_your_email }}
@@ -119,6 +119,17 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+function randomString (length, chars) {
+  let mask = ''
+  if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz'
+  if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  if (chars.indexOf('#') > -1) mask += '0123456789'
+  if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\'
+  let result = ''
+  for (let i = length; i > 0; --i) result += mask[Math.floor(Math.random() * mask.length)]
+  return result
+}
+
 export default {
   data () {
     return {
@@ -126,7 +137,7 @@ export default {
       description: '',
       contactMethod: '',
       name: '',
-      ani: '',
+      phone: '',
       email: '',
       locationType: 'gps',
       latitude: '',
@@ -139,12 +150,19 @@ export default {
       dnis: '9194745516',
       working: false,
       feedId: '100020',
-      imgUrl: null
+      imgUrl: null,
+      randomId: ''
     }
   },
   mounted () {
     // this.getBrand(this.email)
     this.getLocation()
+    // generate random ID for this session, if phone number is not used
+    this.randomId = randomString(10, '#')
+    // load localStorage data for pre-filling form
+    if (window.localStorage.name) this.name = window.localStorage.name
+    if (window.localStorage.phone) this.phone = window.localStorage.phone
+    if (window.localStorage.email) this.email = window.localStorage.email
   },
   computed: {
     ...mapGetters([
@@ -155,20 +173,28 @@ export default {
       'language',
       'localizations'
     ]),
-    submitIsEnabled () {
-      switch (this.contactMethod) {
-        case 'call': return this.validateAni
-        case 'callback': return this.validateAni
-        case 'sms': return true
-        case 'chat': return this.validateAni && this.validateEmail
-        case 'email': return this.validateEmail
-        case 'video': return this.validateAni
+    ani () {
+      // use the phone number if available, or else use the randomly generated ID
+      if (this.phone.length && this.validatePhone) {
+        return this.phone
+      } else {
+        return this.randomId
       }
     },
-    validateAni () {
+    submitIsEnabled () {
+      switch (this.contactMethod) {
+        case 'call': return this.validatePhone
+        case 'callback': return this.validatePhone
+        case 'sms': return true
+        case 'chat': return this.validatePhone && this.validateEmail
+        case 'email': return this.validateEmail
+        case 'video': return this.validatePhone
+      }
+    },
+    validatePhone () {
       // numbers only
       const searchRegex = new RegExp(/^\d+$/)
-      return searchRegex.test(this.ani) && this.ani.length
+      return searchRegex.test(this.phone) && this.phone.length
     },
     validateEmail () {
       // email address
@@ -206,10 +232,10 @@ export default {
         sms: {
           text: this.tr.o_sms,
           icon: 'fa fa-comments'
-        },
-        video: {
-          text: this.tr.o_video,
-          icon: 'fa fa-video-camera'
+        // },
+        // video: {
+        //   text: this.tr.o_video,
+        //   icon: 'fa fa-video-camera'
         }
       }
     },
@@ -225,7 +251,7 @@ export default {
     brand () {
       return this.$route.params.brand
     },
-    formData () {
+    callbackFormData () {
       return {
         feedId: this.feedId,
         contact: {
@@ -348,6 +374,10 @@ export default {
     },
     async submit () {
       this.working = true
+      // store/update localStorate data with form data, if set
+      if (this.name.length) window.localStorage.name = this.name
+      if (this.phone.length) window.localStorage.phone = this.phone
+      if (this.email.length) window.localStorage.email = this.email
       // upload call data
       const p1 = this.sendCallData({
         requestType: this.requestType,
@@ -375,9 +405,7 @@ export default {
         await Promise.all([p1, p2])
         // save image long URL
         // this.imgUrl = `https://link.cxdemo.net/`
-        if (this.ani) {
-          this.imgUrl = `https://toolbox-dev.cxdemo.net/api/v5/mc/image/${this.ani}`
-        }
+        this.imgUrl = `https://toolbox-dev.cxdemo.net/api/v5/mc/image/${this.ani}`
         this.working = false
         switch (this.contactMethod) {
           case 'call': this.startCall(); break
@@ -401,7 +429,7 @@ export default {
     },
     startCallback () {
       console.log('start callback')
-      this.sendCallbackRequest(this.formData)
+      this.sendCallbackRequest(this.callbackFormData)
     },
     async startSms () {
       console.log('start sms')
@@ -424,12 +452,16 @@ export default {
     },
     async startEmail () {
       console.log('start email')
-      const message = await this.getMessage()
+      // const message = await this.getMessage()
+      let message = `Need Advice at 32.9700805, -96.67821269999999
+image: <img src="https://link.cxdemo.net/ZosyHR">
+adsf`
       const mailOptions = {
         name: this.name,
         email: this.email,
         subject: this.requestTypes[this.requestType], // Subject line
-        text: message // plain text body
+        // text: message // plain text body
+        html: message // html body
       }
       try {
         await this.sendEmail(mailOptions)
