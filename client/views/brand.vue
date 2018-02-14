@@ -15,8 +15,8 @@
             <hr>
             <div class="select is-fullwidth">
               <select v-model="requestType">
-                <option selected disabled value="">{{ requestTypesLoading ? tr.loading : tr.o_select_category }}</option>
-                <option v-for="(requestType, key) in requestTypes" :value="key">{{ requestType }}</option>
+                <option selected disabled value="">{{ tr.o_select_category }}</option>
+                <option v-for="requestType in requestTypes" :value="requestType.name">{{ requestType.title }}</option>
               </select>
             </div>
           </div>
@@ -151,12 +151,12 @@ export default {
       working: false,
       feedId: '100020',
       imgUrl: null,
-      randomId: '',
-      requestTypesLoading: false
+      randomId: ''
+      // requestTypesLoading: false
     }
   },
   mounted () {
-    this.getRequestTypes()
+    // this.getRequestTypes()
     // this.getBrand(this.email)
     this.getLocation()
     // generate random ID for this session, if phone number is not used
@@ -170,11 +170,18 @@ export default {
     ...mapGetters([
       'pkg',
       'brands',
-      'requestTypes',
+      // 'requestTypes',
       // 'contactMethods',
       'language',
       'localizations'
     ]),
+    requestTypes () {
+      try {
+        return this.brands.find(v => v.name === this.brand && v.data.language === this.language).data.requestTypes
+      } catch (e) {
+        return []
+      }
+    },
     ani () {
       // use the phone number if available, or else use the randomly generated ID
       if (this.phone.length && this.validatePhone) {
@@ -286,24 +293,24 @@ export default {
     },
     cvs () {
       return [
-        this.name,
-        `${this.latitude}, ${this.longitude}`,
-        this.language,
-        '',
-        '',
-        this.email,
-        this.brand,
-        this.requestType,
-        '',
-        ''
+        this.name, // cv1
+        `${this.latitude}, ${this.longitude}`, // cv2
+        this.language, // cv3
+        '', // cv4
+        '', // cv5
+        this.email, // cv6
+        this.brand, // cv7
+        'Mobile Connect', // cv8
+        this.requestType, // cv9
+        '' // cv10
       ]
     }
   },
   watch: {
-    brand (val, oldVal) {
-      // brand was changed - reload the request types
-      this.getRequestTypes()
-    },
+    // brand (val, oldVal) {
+    //   // brand was changed - reload the request types
+    //   this.getRequestTypes()
+    // },
     requestType (val, oldVal) {
       // scroll to description (using question-type div) when request type is
       // first selected
@@ -337,19 +344,19 @@ export default {
       'sendEmail',
       'shortenUrl',
       'uploadImage',
-      'openChat',
-      'loadRequestTypes'
+      'openChat'
+      // 'loadRequestTypes'
     ]),
-    async getRequestTypes () {
-      this.requestTypesLoading = true
-      try {
-        await this.loadRequestTypes({brand: this.brand, showNotification: false})
-      } catch (e) {
-        // continue
-      } finally {
-        this.requestTypesLoading = false
-      }
-    },
+    // async getRequestTypes () {
+    //   this.requestTypesLoading = true
+    //   try {
+    //     await this.loadRequestTypes({brand: this.brand, showNotification: false})
+    //   } catch (e) {
+    //     // continue
+    //   } finally {
+    //     this.requestTypesLoading = false
+    //   }
+    // },
     getLocation () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition)
