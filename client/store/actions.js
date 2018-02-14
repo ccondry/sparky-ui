@@ -153,7 +153,7 @@ export const openChat = function ({commit, state, getters, rootState, dispatch},
     /* eGain Chat server */
     serverURL: 'https://ece2.cxdemo.net/system',
     /* eGain Chat Entry Point */
-    EntryPointId: '1002',
+    EntryPointId: '1001',
     /* eGain Chat Locale */
     Locale: 'en-US',
     /* eGain template name */
