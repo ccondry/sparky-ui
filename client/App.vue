@@ -10,7 +10,7 @@
 <script>
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import { Navbar, AppMain, FooterBar } from 'components/layout/'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -19,11 +19,19 @@ export default {
     FooterBar,
     NprogressContainer
   },
-  mounted () {
-    this.loadBrands()
+  async mounted () {
+    console.log('set loading = true')
+    this.setLoading(true)
+    await this.loadBrands()
+    await this.loadLocalizations()
+    console.log('set loading = false')
+    this.setLoading(false)
   },
   methods: {
-    ...mapActions(['loadBrands'])
+    ...mapActions(['loadBrands', 'loadLocalizations', 'setLoading'])
+  },
+  computed: {
+    ...mapGetters(['loading'])
   }
 }
 </script>

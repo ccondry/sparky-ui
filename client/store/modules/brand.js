@@ -16,7 +16,7 @@ const mutations = {
 
 const actions = {
   async loadBrands ({dispatch}, showNotification = true) {
-    dispatch('loadToState', {
+    await dispatch('loadToState', {
       name: 'brands',
       path: 'mc/brands',
       mutation: types.SET_BRANDS,

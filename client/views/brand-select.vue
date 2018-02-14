@@ -30,7 +30,10 @@ export default {
   computed: {
     ...mapGetters(['localizations', 'brands']),
     tr () {
-      return this.localizations[this.language] || {}
+      return this.localization.data || {}
+    },
+    localization () {
+      return this.localizations.find(v => v.name === this.language) || {}
     },
     language () {
       return this.$route.params.language
