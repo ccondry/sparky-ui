@@ -96,6 +96,10 @@ export const sendEmail = async function ({getters, commit, dispatch}, data) {
   }
 }
 
+export const setLoading = async function ({commit}, data) {
+  commit(types.SET_LOADING, data)
+}
+
 export const shortenUrl = async function ({getters, commit, dispatch}, data) {
   try {
     console.log(`shortenUrl data`, data)

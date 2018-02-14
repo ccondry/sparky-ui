@@ -5,7 +5,7 @@
         <div class="nav-left hero-brand">
           <router-link class="nav-item hero-brand" :to="{ name: 'Home' }">
             <!-- <img src="~assets/logo.svg" :alt="pkginfo.description"> -->
-            {{ brand.title || 'Mobile Connect' }}
+            {{ brand.data && brand.data.title ? brand.data.title : 'Mobile Connect' }}
           </router-link>
         </div>
         <div class="nav-center">
@@ -50,9 +50,13 @@ export default {
       return this.$route.params.language
     },
     brand () {
-      return this.brands.find(v => {
-        return v.id === this.brandId && v.language === this.language
-      }) || {}
+      if (this.brands && this.brands.length) {
+        return this.brands.find(v => {
+          return v.name === this.brandId && v.data.language === this.language
+        }) || {}
+      } else {
+        return {}
+      }
     }
   }
 }

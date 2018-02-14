@@ -4,6 +4,7 @@ import pkg from 'package'
 import * as actions from './actions'
 import * as getters from './getters'
 import modules from './modules'
+import * as types from './mutation-types'
 
 Vue.use(Vuex)
 
@@ -13,9 +14,14 @@ const store = new Vuex.Store({
   getters,
   modules,
   state: {
-    pkg
+    pkg,
+    loading: true
   },
-  mutations: {}
+  mutations: {
+    [types.SET_LOADING] (state, data) {
+      state.loading = data
+    }
+  }
 })
 
 export default store

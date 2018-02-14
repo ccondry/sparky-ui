@@ -11,8 +11,8 @@
             </p> -->
             <!-- <router-link :to="{ name: 'Report', params: { brand: 'health' } }">Cumulus Health</router-link> -->
             <ul>
-              <li v-for="(language, code) in languages">
-                <router-link :to="{ name: 'Brand Select', params: { language: code } }">{{ language }}</router-link>
+              <li v-for="language in filteredLanguages">
+                <router-link :to="{ name: 'Brand Select', params: { language: language.code } }">{{ language.language }}</router-link>
               </li>
             </ul>
           </div>
@@ -30,8 +30,15 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'languages'
-    ])
+      'languages',
+      'localizations'
+    ]),
+    filteredLanguages () {
+      // only show languages with matching localizations available
+      return this.languages.filter(v => {
+        return this.localizations.find(e => e.name === v.code)
+      })
+    }
   }
 }
 </script>
