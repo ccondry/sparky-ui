@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nprogress-container></nprogress-container>
-    <navbar :show="true"></navbar>
+    <navbar :show="true" :logo="logo"></navbar>
     <app-main></app-main>
     <footer-bar></footer-bar>
   </div>
@@ -13,6 +13,11 @@ import { Navbar, AppMain, FooterBar } from 'components/layout/'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  data () {
+    return {
+      logo: 'https://cxdemo.net/users/lchilds/citi/logo.jpg'
+    }
+  },
   components: {
     Navbar,
     AppMain,
@@ -22,8 +27,8 @@ export default {
   async mounted () {
     console.log('set loading = true')
     this.setLoading(true)
-    await this.loadBrands()
-    await this.loadLocalizations()
+    // await this.loadBrands()
+    // await this.loadLocalizations()
     console.log('set loading = false')
     this.setLoading(false)
   },
