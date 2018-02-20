@@ -41,16 +41,17 @@ export default {
   data () {
     return {
       input: '',
-      cancelScroll: null
+      cancelScroll: null,
+      interval: null
     }
   },
   computed: {
     ...mapGetters([
-      'messages'
+      'messages', 'sessionId'
     ])
   },
   methods: {
-    ...mapActions(['addMessage']),
+    ...mapActions(['addMessage', 'getMessages']),
     submit (e) {
       console.log(e)
       if (e.ctrlKey) {
@@ -76,10 +77,17 @@ export default {
   },
   watch: {
     messages (val, oldVal) {
-      console.log('messages changed. length =', val.length)
-      console.log('messages changed. old length =', oldVal.length)
+      // console.log('messages changed. length =', val.length)
+      // console.log('messages changed. old length =', oldVal.length)
       // scroll the last messgage into view
       if (val.length !== oldVal.length) this.scrollToLastMessage()
+    },
+    sessionId (val, oldVal) {
+      console.log('sessionId changed:', val)
+      if (val && !oldVal) {
+        // start getMessages loop
+        this.interval = setInterval(this.getMessages, 2000)
+      }
     }
   }
 }

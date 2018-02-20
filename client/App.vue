@@ -29,11 +29,12 @@ export default {
     this.setLoading(true)
     // await this.loadBrands()
     // await this.loadLocalizations()
+    await this.getSession()
     console.log('set loading = false')
     this.setLoading(false)
   },
   methods: {
-    ...mapActions(['loadBrands', 'loadLocalizations', 'setLoading'])
+    ...mapActions(['getSession', 'setLoading'])
   },
   computed: {
     ...mapGetters(['loading'])
