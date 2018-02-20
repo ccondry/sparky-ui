@@ -1,32 +1,86 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-      <div class="tile is-parent is-3 is-hidden-mobile"></div>
-      <div class="tile is-parent is-6">
+      <div class="tile is-parent is-4 is-hidden-mobile"></div>
+      <div class="tile is-parent is-4">
         <article class="tile is-child box">
-          <div class="messages">
+          <div id="messages" class="messages">
             <ul>
               <li v-for="message of messages">
                 <span :class="message.type">{{ message.text }}</span>
               </li>
+              <li id="last-message"></li>
             </ul>
+          </div>
+          <div class="input-box">
+            <form>
+              <textarea class="input"
+              v-model="input"
+              style="min-height: 3em; width:100%;"
+              placeholder="Enter message"
+              @keypress.enter.exact.prevent="submit"
+              focus></textarea>
+            </form>
           </div>
         </article>
       </div>
-      <div class="tile is-parent is-3 is-hidden-mobile"></div>
+      <div class="tile is-parent is-4 is-hidden-mobile"></div>
     </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  mounted () {
+    console.log('mounted')
+    this.scrollToLastMessage()
+  },
+  data () {
+    return {
+      input: '',
+      cancelScroll: null
+    }
+  },
   computed: {
     ...mapGetters([
       'messages'
     ])
+  },
+  methods: {
+    ...mapActions(['addMessage']),
+    submit (e) {
+      console.log(e)
+      if (e.ctrlKey) {
+        // TODO if they hit ctrl-enter, let them enter a newline and don't add to messages
+      }
+      // don't do anything if no text was entered
+      if (!this.input.trim().length) {
+        return
+      }
+      // add message to state
+      this.addMessage({
+        text: this.input,
+        type: 'customer'
+      })
+      // clear input
+      this.input = ''
+    },
+    async scrollToLastMessage () {
+      console.log('scrolling')
+      // scroll to the bottom if a new message was added
+      this.$scrollTo('#last-message', 10, {container: '#messages'})
+    }
+  },
+  watch: {
+    messages (val, oldVal) {
+      console.log('messages changed. length =', val.length)
+      console.log('messages changed. old length =', oldVal.length)
+      // scroll the last messgage into view
+      if (val.length !== oldVal.length) this.scrollToLastMessage()
+    }
   }
 }
 </script>
@@ -39,15 +93,29 @@ export default {
   --border-color: grey;
 }
 
+.input-box {
+  //   background-color: white;
+  //   height: 40px;
+  //   padding: 0px;
+  // border-width: 4px;
+  border-color: #000000;
+  border-style: solid;
+}
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
 .messages {
-  padding: 10px;
-  height: 400px;
-  background-color: white;
+  height: calc(100vh - 150px);
+  // padding: 10px;
+  // height: 400px;
+  // background-color: white;
   background-color: rgb(237, 239, 244);
-  border-width: 4px;
+  // border-width: 4px;
   border-color: #000000;
   border-style: solid;
   overflow-y: scroll;
+  overflow: scroll;
 
   ul {
     padding: 0px;
@@ -65,6 +133,7 @@ export default {
         max-width: 200px;
         background-color: white;
         padding: 5px;
+        margin-bottom: 4px;
         border-radius: 4px;
         position: relative;
         border-width: 1px;
@@ -72,38 +141,41 @@ export default {
         border-color: var(--border-color);
       }
 
-      span.left {
+      span.bot {
         float: left;
       }
 
-      span.right {
+      span.customer {
         float: right;
         background-color: var(--right-color);
       }
 
-      span.systemmsg-chat {
+      span.system {
         float: left;
         background-color: var(--system-color);
       }
-      span.left-chat {
+
+      span.bot-chat {
         float: left;
         background-color: var(--left-color);
       }
 
-      span.left:after {
+      span.bot:after {
         content: "";
         display: inline-block;
         position: absolute;
-        left: -8.5px;
+        left: -8px;
         top: 7px;
         height: 0px;
         width: 0px;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
         border-right: 8px solid white;
+        // border-left: 8px solid var(--border-color);
+        z-index: 101;
       }
 
-      span.left:before {
+      span.bot:before {
         content: "";
         display: inline-block;
         position: absolute;
@@ -114,13 +186,14 @@ export default {
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
         border-right: 8px solid var(--border-color);
+        z-index: 100;
       }
 
-      span.systemmsg-chat:after {
+      span.system:after {
         content: "";
         display: inline-block;
         position: absolute;
-        left: -8.5px;
+        left: -8px;
         top: 7px;
         height: 0px;
         width: 0px;
@@ -129,7 +202,7 @@ export default {
         border-right: 8px solid var(--system-color);
       }
 
-      span.systemmsg-chat:before {
+      span.system:before {
         content: "";
         display: inline-block;
         position: absolute;
@@ -142,7 +215,7 @@ export default {
         border-right: 8px solid var(--border-color);
       }
 
-      span.left-chat:after {
+      span.bot-chat:after {
         content: "";
         display: inline-block;
         position: absolute;
@@ -155,7 +228,7 @@ export default {
         border-right: 8px solid var(--left-color);
       }
 
-      span.left-chat:before {
+      span.bot-chat:before {
         content: "";
         display: inline-block;
         position: absolute;
@@ -168,7 +241,7 @@ export default {
         border-right: 8px solid var(--border-color);
       }
 
-      span.right:after {
+      span.customer:after {
         content: "";
         display: inline-block;
         position: absolute;
@@ -181,7 +254,7 @@ export default {
         border-left: 8px solid var(--right-color);
       }
 
-      span.right:before {
+      span.customer:before {
         content: "";
         display: inline-block;
         position: absolute;
