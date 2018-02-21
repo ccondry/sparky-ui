@@ -4,12 +4,14 @@ import request from 'superagent'
 
 const state = {
   messages: [],
-  sessionId: null
+  sessionId: null,
+  sessionBody: {}
 }
 
 const getters = {
   messages: state => state.messages,
-  sessionId: state => state.sessionId
+  sessionId: state => state.sessionId,
+  sessionBody: state => state.sessionBody
 }
 
 const mutations = {
@@ -17,18 +19,38 @@ const mutations = {
     state.messages.push(data)
   },
   [types.SET_MESSAGES] (state, data) {
-    state.messages = data
+    if (data.length > state.messages.length) {
+      state.messages = data
+    }
   },
   [types.SET_SESSION_ID] (state, data) {
     state.sessionId = data
+  },
+  [types.SET_SESSION_BODY] (state, data) {
+    state.sessionBody = data
   }
 }
 
 const actions = {
-  async getSession ({dispatch, commit}) {
+  setSessionBody ({commit}, body) {
+    // store body
+    commit(types.SET_SESSION_BODY, body)
+  },
+  async getSession ({dispatch, commit, getters}) {
     try {
-      const uri = `http://localhost:3020/api/v1/session`
-      const response = await request.get(uri)
+      const uri = `${getters.apiBase}/session`
+      // const body = {
+      //   entryPointId,
+      //   phone,
+      //   email,
+      //   firstName,
+      //   lastName,
+      //   apiAiToken,
+      //   bot
+      // }
+      console.log('getters.sessionBody', getters.sessionBody)
+      // get session from server
+      const response = await request.post(uri).send(getters.sessionBody)
       console.log('get session response', response)
       commit(types.SET_SESSION_ID, response.body.sessionId)
     } catch (e) {
@@ -37,7 +59,7 @@ const actions = {
   },
   async getMessages ({dispatch, commit, getters}) {
     try {
-      const uri = `http://localhost:3020/api/v1/messages`
+      const uri = `${getters.apiBase}/messages`
       const query = {
         sessionId: getters.sessionId
       }
@@ -62,7 +84,7 @@ const actions = {
   },
   async addMessage ({commit, getters}, data) {
     try {
-      const uri = `http://localhost:3020/api/v1/messages`
+      const uri = `${getters.apiBase}/messages`
       const response = await request
       .post(uri)
       .send({

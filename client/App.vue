@@ -29,15 +29,32 @@ export default {
     this.setLoading(true)
     // await this.loadBrands()
     // await this.loadLocalizations()
-    await this.getSession()
+    console.log('this.route: ', this.$route)
+    this.setSessionBody({
+      firstName: this.$route.query.firstName,
+      lastName: this.$route.query.lastName,
+      email: this.$route.query.email,
+      phone: this.$route.query.phone,
+      entryPointId: this.$route.query.entryPointId,
+      // title: this.$route.query.title,
+      // logo: this.$route.query.logo,
+      apiAiToken: this.$route.query.apiAiToken,
+      bot: this.$route.query.bot
+    })
     console.log('set loading = false')
     this.setLoading(false)
   },
   methods: {
-    ...mapActions(['getSession', 'setLoading'])
+    ...mapActions(['getSession', 'setLoading', 'setSessionBody'])
   },
   computed: {
-    ...mapGetters(['loading'])
+    ...mapGetters(['loading', 'sessionBody'])
+  },
+  watch: {
+    sessionBody (val, oldVal) {
+      // get session when the session body has changed
+      this.getSession()
+    }
   }
 }
 </script>

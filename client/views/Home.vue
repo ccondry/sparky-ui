@@ -77,10 +77,9 @@ export default {
   },
   watch: {
     messages (val, oldVal) {
-      // console.log('messages changed. length =', val.length)
-      // console.log('messages changed. old length =', oldVal.length)
-      // scroll the last messgage into view
-      if (val.length !== oldVal.length) this.scrollToLastMessage()
+      // scroll the last messgage into view, if there are new messages
+      // if (val.length !== oldVal.length)
+      this.scrollToLastMessage()
     },
     sessionId (val, oldVal) {
       console.log('sessionId changed:', val)
@@ -110,8 +109,8 @@ export default {
   border-style: solid;
 }
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
 }
 .messages {
   height: calc(100vh - 150px);
@@ -273,6 +272,40 @@ export default {
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
         border-left: 8px solid var(--border-color);
+      }
+
+      span.agent-chat {
+        float: left;
+        background-color: var(--left-color);
+      }
+
+      span.agent:after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        left: -8px;
+        top: 7px;
+        height: 0px;
+        width: 0px;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid white;
+        // border-left: 8px solid var(--border-color);
+        z-index: 101;
+      }
+
+      span.agent:before {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        left: -9px;
+        top: 7px;
+        height: 0px;
+        width: 0px;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid var(--border-color);
+        z-index: 100;
       }
     }
   }

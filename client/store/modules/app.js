@@ -2,8 +2,8 @@
 import * as types from '../mutation-types'
 
 const apiBase = {
-  'production': '/api/v5',
-  'development': 'http://localhost:3000/api/v5'
+  'production': '/api/v1',
+  'development': 'http://localhost:3020/api/v1'
 }
 
 const getters = {
