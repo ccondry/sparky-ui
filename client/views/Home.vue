@@ -6,6 +6,9 @@
         <article class="tile is-child box">
           <div id="messages" class="messages">
             <ul>
+              <li v-if="messages.length === 0">
+                <span class="system">Connecting...</span>
+              </li>
               <li v-for="message of messages">
                 <span v-if="message.type !== 'command'" :class="message.type">{{ message.text }}</span>
               </li>
