@@ -12,7 +12,7 @@
             <!-- center section -->
             <div class="tile is-parent is-4">
               <article class="tile is-child box">
-                <form @keyup.enter="submit">
+                <form @submit.enter="submit">
                   <div class="block">
                     <label class="label">First Name</label>
                     <input class="input" v-model="form.firstName">
