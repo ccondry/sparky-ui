@@ -7,7 +7,7 @@
           <div id="messages" class="messages">
             <ul>
               <li v-for="message of messages">
-                <span :class="message.type">{{ message.text }}</span>
+                <span v-if="message.type !== 'command'" :class="message.type">{{ message.text }}</span>
               </li>
               <li id="last-message"></li>
             </ul>
@@ -80,6 +80,24 @@ export default {
       // scroll the last messgage into view, if there are new messages
       // if (val.length !== oldVal.length)
       this.scrollToLastMessage()
+      // check message for command
+      let message = val[val.length - 1]
+      if (message.type === 'command') {
+        // this.$emit('command', message.text)
+        let command = message.text
+        switch (command) {
+          // case 'start-rem-video': {
+          //   // start REM video call
+          //   this.startRemCall()
+          //   break
+          // }
+          case 'mortgage-calculator': {
+            // open calculator
+            window.open('https://cxdemo.net/demos/frank-bot/calculator.html', 'calculator', 'location=1,status=1,scrollbars=1,width=400,height=800')
+            break
+          }
+        }
+      }
     },
     sessionId (val, oldVal) {
       console.log('sessionId changed:', val)
