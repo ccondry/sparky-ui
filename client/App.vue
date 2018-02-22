@@ -56,7 +56,7 @@ export default {
   },
   data () {
     return {
-      logo: 'https://cxdemo.net/users/lchilds/citi/logo.jpg',
+      logo: 'https://cxdemo.net/users/ccondry/altocloud/logo.png',
       firstName: null,
       lastName: null,
       email: null,
