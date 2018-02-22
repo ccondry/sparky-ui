@@ -39,7 +39,8 @@ export default {
       // title: this.$route.query.title,
       // logo: this.$route.query.logo,
       apiAiToken: this.$route.query.apiAiToken,
-      bot: this.$route.query.bot
+      bot: this.$route.query.bot,
+      visitId: this.$route.query.visitId
     })
     console.log('set loading = false')
     this.setLoading(false)
