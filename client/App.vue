@@ -51,6 +51,9 @@ import { Navbar, AppMain, FooterBar } from 'components/layout/'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  created () {
+    window.document.title = 'Universal Insurance'
+  },
   data () {
     return {
       logo: 'https://cxdemo.net/users/lchilds/citi/logo.jpg',
