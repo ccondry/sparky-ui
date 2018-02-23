@@ -158,7 +158,7 @@ export default {
 
       span {
         display: inline-block;
-        max-width: 200px;
+        max-width: 80%;
         background-color: white;
         padding: 5px;
         margin-bottom: 4px;
