@@ -3,21 +3,10 @@
     <div class="hero-head">
       <nav class="nav">
         <div class="nav-left hero-brand">
-          <router-link class="nav-item hero-brand" :to="{ name: 'Home' }">
-            <!-- <img src="~assets/logo.svg" :alt="pkginfo.description"> -->
-            {{ brand.data && brand.data.title ? brand.data.title : 'Mobile Connect' }}
-          </router-link>
+            <img :src="logo" style="max-height: 49px;">
         </div>
         <div class="nav-center">
 
-        </div>
-        <div class="nav-right is-flex">
-          <div class="nav-item">
-            Log In
-          </div>
-          <div class="nav-item">
-            Sign Up
-          </div>
         </div>
       </nav>
     </div>
@@ -25,40 +14,8 @@
 </template>
 
 <script>
-import Tooltip from 'vue-bulma-tooltip'
-import { mapGetters } from 'vuex'
-
 export default {
-
-  components: {
-    Tooltip
-  },
-
-  props: {
-    show: Boolean
-  },
-
-  computed: {
-    ...mapGetters({
-      pkginfo: 'pkg',
-      brands: 'brands'
-    }),
-    brandId () {
-      return this.$route.params.brand
-    },
-    language () {
-      return this.$route.params.language
-    },
-    brand () {
-      if (this.brands && this.brands.length) {
-        return this.brands.find(v => {
-          return v.name === this.brandId && v.data.language === this.language
-        }) || {}
-      } else {
-        return {}
-      }
-    }
-  }
+  props: ['show', 'logo']
 }
 </script>
 
@@ -66,7 +23,8 @@ export default {
 @import '~bulma/sass/utilities/variables';
 
 :root {
-  --bg-color: rgba(79, 208, 220, 1);
+  // --bg-color: rgba(79, 208, 220, 1);
+  --bg-color: rgba(255, 255, 255, 1);
   --text-color: white;
 }
 

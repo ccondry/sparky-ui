@@ -477,7 +477,7 @@ export default {
     async startChat () {
       console.log('start chat')
       const message = await this.getMessage()
-      console.log('opening the chat window')
+      console.log('opening the chat window', message)
       this.openChat({
         name: this.name,
         email: this.email,
@@ -513,7 +513,9 @@ export default {
       }
     },
     async getMessage () {
-      let message = `${this.requestTypes[this.requestType]} at ${this.latitude}, ${this.longitude}`
+      let rt = this.requestTypes[this.requestType] || this.tr.title || 'Mobile Connect'
+      console.log('rt', rt)
+      let message = `${rt} at ${this.latitude}, ${this.longitude}`
       try {
         if (this.imgUrl) {
           const response = await this.shortenUrl(this.imgUrl)
@@ -529,6 +531,7 @@ export default {
       }
       // add description to message
       message += `\r\n${this.description}`
+      console.log('message', message)
       return message
     },
     async getHtmlMessage () {
