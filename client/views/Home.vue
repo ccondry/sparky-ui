@@ -10,7 +10,7 @@
                 <span class="system">Connecting...</span>
               </li>
               <li v-for="message of messages">
-                <span v-if="message.type !== 'command'" :class="message.type">{{ message.text }}</span>
+                <span v-if="message.type !== 'command'" :class="message.type" v-html="message.text"></span>
               </li>
               <li id="last-message"></li>
             </ul>
