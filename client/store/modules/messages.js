@@ -19,7 +19,8 @@ const mutations = {
     state.messages.push(data)
   },
   [types.SET_MESSAGES] (state, data) {
-    if (data.length > state.messages.length) {
+    // only update the state if there are a different number of messages
+    if (data.length !== state.messages.length) {
       state.messages = data
     }
   },
