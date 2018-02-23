@@ -1,8 +1,8 @@
 {
-  "name": "mobile-connect-ui",
-  "version": "2.1.0",
-  "description": "Mobile Connect UI",
-  "repository": "cxdemo/mobile-connect-ui",
+  "name": "sparky-ui",
+  "version": "0.1.0",
+  "description": "Sparky ECE chat bot UI",
+  "repository": "cxdemo/sparky-ui",
   "license": "UNLICENSED",
   "author": {
     "name": "Coty Condry",
@@ -10,9 +10,12 @@
   },
   "keywords": [
     "cisco",
-    "mobile connect",
+    "sparky",
     "pcce",
-    "cxdemo"
+    "cxdemo",
+    "ece",
+    "bot",
+    "chat"
   ],
   "engines": {
     "node": ">=4",
