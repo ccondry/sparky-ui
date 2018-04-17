@@ -3,7 +3,7 @@
     <div class="hero-head">
       <nav class="nav">
         <div class="nav-left hero-brand">
-            <img :src="logo" style="max-height: 49px;">
+            <!-- <img :src="logo" style="max-height: 49px;"> -->
         </div>
         <div class="nav-center">
 

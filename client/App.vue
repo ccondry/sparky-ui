@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nprogress-container></nprogress-container>
-    <navbar :show="true" :logo="logo"></navbar>
+    <!-- <navbar :show="true"></navbar> -->
     <app-main v-if="connecting"></app-main>
     <div v-if="!connecting">
       <section class="app-main">
