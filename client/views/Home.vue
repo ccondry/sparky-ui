@@ -123,7 +123,7 @@ export default {
 :root {
   --left-color: #f1f0f0;
   --right-color: rgb(64, 128, 255);
-  --system-color: #ffff00;
+  --system-color: #f1f0f0;
   --border-color: grey;
 }
 
