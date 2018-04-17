@@ -39,7 +39,7 @@ const actions = {
   },
   async getSession ({dispatch, commit, getters}) {
     try {
-      const uri = `${getters.apiBase}/session`
+      const uri = `${getters.apiBase}/sparky/session`
       // const body = {
       //   entryPointId,
       //   phone,
@@ -60,7 +60,7 @@ const actions = {
   },
   async getMessages ({dispatch, commit, getters}) {
     try {
-      const uri = `${getters.apiBase}/messages`
+      const uri = `${getters.apiBase}/sparky/messages`
       const query = {
         sessionId: getters.sessionId
       }
@@ -85,7 +85,7 @@ const actions = {
   },
   async addMessage ({commit, getters}, data) {
     try {
-      const uri = `${getters.apiBase}/messages`
+      const uri = `${getters.apiBase}/sparky/messages`
       const response = await request
       .post(uri)
       .send({
