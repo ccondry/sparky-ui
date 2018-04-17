@@ -1,5 +1,5 @@
-# Mobile Connect UI
-This is the UI for the Mobile Connect demo
+# dCloud Sparky UI
+This is the UI for the Sparky chat bot demo in dCloud
 
 ## Requirements
   * Node >= v5
@@ -8,8 +8,8 @@ This is the UI for the Mobile Connect demo
 
 ## Installation
 ```sh
-git clone https://gitlab.com/cxdemo/mobile-connect-ui.git
-cd mobile-connect-ui
+git clone https://gitlab.com/dcloud-collab/sparky-ui.git
+cd sparky-ui
 npm install
 ```
 
