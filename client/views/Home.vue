@@ -22,11 +22,11 @@
           <div class="input-box">
             <form>
               <textarea class="input"
+              ref="textinput"
               v-model="input"
               style="min-height: 3em; width:100%;"
               placeholder="Type a message..."
-              @keypress.enter.exact.prevent="submit"
-              focus></textarea>
+              @keypress.enter.exact.prevent="submit"></textarea>
             </form>
           </div>
         </article>
@@ -44,6 +44,8 @@ export default {
   mounted () {
     console.log('mounted')
     this.scrollToLastMessage()
+    // focus the text input
+    this.$refs.textinput.focus()
   },
   data () {
     return {
