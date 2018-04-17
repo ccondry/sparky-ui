@@ -52,7 +52,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   created () {
-    window.document.title = 'Cumulus Travel'
+    window.document.title = 'Cumulus'
   },
   data () {
     return {
