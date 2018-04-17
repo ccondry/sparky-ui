@@ -2,8 +2,8 @@
   <div id="app">
     <nprogress-container></nprogress-container>
     <navbar :show="true" :logo="logo"></navbar>
-    <app-main v-if="emailValid"></app-main>
-    <div v-if="!emailValid">
+    <app-main v-if="connecting"></app-main>
+    <div v-if="!connecting">
       <section class="app-main">
         <div class="container is-fluid is-marginless app-content">
           <div class="tile is-ancestor">
@@ -15,19 +15,19 @@
                 <form @submit.enter="submit">
                   <div class="block">
                     <label class="label">First Name</label>
-                    <input class="input" v-model="form.firstName">
+                    <input class="input" v-model="firstName">
                   </div>
                   <div class="block">
                     <label class="label">Last Name</label>
-                    <input class="input" v-model="form.lastName">
+                    <input class="input" v-model="lastName">
                   </div>
                   <div class="block">
                     <label class="label">Phone Number</label>
-                    <input class="input" v-model="form.phone">
+                    <input class="input" v-model="phone">
                   </div>
                   <div class="block">
                     <label class="label">Email Address</label>
-                    <input class="input" v-model="form.email">
+                    <input class="input" v-model="email">
                   </div>
                   <div class="block">
                     <button class="button is-success" @click.prevent="submit">Start Chat</button>
@@ -52,21 +52,16 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   created () {
-    window.document.title = 'Universal Insurance'
+    window.document.title = 'Cumulus Travel'
   },
   data () {
     return {
       logo: 'https://cxdemo.net/users/ccondry/altocloud/logo.png',
-      firstName: null,
-      lastName: null,
-      email: null,
-      phone: null,
-      form: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: ''
-      }
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      connecting: false
     }
   },
   components: {
@@ -82,11 +77,11 @@ export default {
     this.email = this.$route.query.email
     this.phone = this.$route.query.phone
 
-    // fill out form with query data
-    this.form.firstName = this.firstName
-    this.form.lastName = this.lastName
-    this.form.email = this.email
-    this.form.phone = this.phone
+    // check that form is filled
+    if (this.firstName.length && this.lastName.length && this.email.length && this.phone.length) {
+      // start the session
+      this.startSession()
+    }
   },
   methods: {
     ...mapActions(['getSession', 'setLoading', 'setSessionBody']),
@@ -96,6 +91,8 @@ export default {
         lastName: this.lastName,
         email: this.email,
         phone: this.phone,
+        dcloudSession: this.$route.query.session,
+        dcloudDatacenter: this.$route.query.datacenter,
         entryPointId: this.$route.query.entryPointId,
         // title: this.$route.query.title,
         // logo: this.$route.query.logo,
@@ -106,30 +103,18 @@ export default {
     },
     submit () {
       console.log('submit form')
-      // set cache with form data
-      this.firstName = this.form.firstName
-      this.lastName = this.form.lastName
-      this.phone = this.form.phone
-      this.email = this.form.email
+      this.startSession()
     }
   },
   computed: {
-    ...mapGetters(['loading', 'sessionBody']),
-    emailValid () {
-      return this.email && this.email.length > 0
-    }
+    ...mapGetters(['loading', 'sessionBody'])
   },
   watch: {
     sessionBody (val, oldVal) {
       // get session when the session body has changed
       this.getSession()
-    },
-    email (val, oldVal) {
-      // if email changes and is valid, start session
-      if (val && val.length > 0) {
-        // start chat session
-        this.startSession()
-      }
+      // hide input form and go to main UI
+      this.connecting = true
     }
   }
 }
