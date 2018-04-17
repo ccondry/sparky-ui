@@ -4,6 +4,7 @@ import * as types from '../mutation-types'
 const apiBase = {
   'production': '/api/v1',
   'development': 'http://localhost:3020/api/v1'
+  // 'development': 'https://mm-chat.cxdemo.net/api/v1'
 }
 
 const getters = {
