@@ -154,7 +154,7 @@ export default {
 /* /placholder text color */
 
 .messages {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 77px);
   // padding: 10px;
   // height: 400px;
   // background-color: white;
