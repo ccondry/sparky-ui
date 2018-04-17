@@ -226,7 +226,7 @@ export default {
         background-color: var(--left-color);
       }
 
-      span.agent-chat {
+      .agent {
         float: left;
         background-color: var(--left-color);
       }
