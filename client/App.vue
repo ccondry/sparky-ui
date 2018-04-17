@@ -56,7 +56,7 @@ export default {
   },
   data () {
     return {
-      logo: 'https://cxdemo.net/users/ccondry/altocloud/logo.png',
+      // logo: 'https://cxdemo.net/users/ccondry/altocloud/logo.png',
       firstName: '',
       lastName: '',
       email: '',
@@ -78,7 +78,7 @@ export default {
     this.phone = this.$route.query.phone
 
     // check that form is filled
-    if (this.firstName.length && this.lastName.length && this.email.length && this.phone.length) {
+    if (this.firstName && this.firstName.length && this.lastName && this.lastName.length && this.email && this.email.length && this.phone && this.phone.length) {
       // start the session
       this.startSession()
     }
