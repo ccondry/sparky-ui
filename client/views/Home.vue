@@ -7,10 +7,14 @@
           <div id="messages" class="messages">
             <ul>
               <li v-if="messages.length === 0">
-                <span class="system">Connecting...</span>
+                <div class="message-container">
+                  <span class="system">Connecting...</span>
+                </div>
               </li>
               <li v-for="message of messages">
-                <span v-if="message.type !== 'command'" :class="message.type" v-html="message.text"></span>
+                <div class="message-container" :class="message.type">
+                  <span v-if="message.type !== 'command'" :class="message.type" v-html="message.text"></span>
+                </div>
               </li>
               <li id="last-message"></li>
             </ul>
@@ -20,7 +24,7 @@
               <textarea class="input"
               v-model="input"
               style="min-height: 3em; width:100%;"
-              placeholder="Enter message"
+              placeholder="Type a message..."
               @keypress.enter.exact.prevent="submit"
               focus></textarea>
             </form>
@@ -115,8 +119,8 @@ export default {
 
 <style lang="scss">
 :root {
-  --left-color: #E4FCEF;
-  --right-color: #dbedfe;
+  --left-color: #f1f0f0;
+  --right-color: rgb(64, 128, 255);
   --system-color: #ffff00;
   --border-color: grey;
 }
@@ -126,22 +130,38 @@ export default {
   //   height: 40px;
   //   padding: 0px;
   // border-width: 4px;
-  border-color: #000000;
-  border-style: solid;
+  // border-color: #000000;
+  border-style: none;
 }
 ::-webkit-scrollbar {
   width: 0px;  /* remove scrollbar space */
   background: transparent;  /* optional: just make scrollbar invisible */
 }
+
+/* placholder text color */
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #dddfe2;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #dddfe2;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #dddfe2;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #dddfe2;
+}
+/* /placholder text color */
+
 .messages {
   height: calc(100vh - 150px);
   // padding: 10px;
   // height: 400px;
   // background-color: white;
-  background-color: rgb(237, 239, 244);
+  // background-color: rgb(237, 239, 244);
   // border-width: 4px;
-  border-color: #000000;
-  border-style: solid;
+  // border-color: #000000;
+  // border-style: solid;
   overflow-y: scroll;
   overflow: scroll;
 
@@ -156,178 +176,194 @@ export default {
       padding-left: 10px;
       padding-right: 10px;
 
-      span {
+      div.message-container {
         display: inline-block;
         max-width: 80%;
         background-color: white;
-        padding: 5px;
+        // padding: 5px;
         margin-bottom: 4px;
-        border-radius: 4px;
+        border-radius: 12px;
         position: relative;
-        border-width: 1px;
-        border-style: solid;
-        border-color: var(--border-color);
+        word-wrap: break-word;
+        // border-width: 1px;
+        // border-style: solid;
+        // border-color: var(--border-color);
       }
 
-      span.bot {
+      span {
+        border-radius: 12px;
+        min-height: 22px;
+        min-width: 14px;
+        overflow: hidden;
+        position: relative;
+        white-space: pre-wrap;
+        padding: 5px 8px 6px;
+        font-family: system-ui, -apple-system, system-ui, ".SFNSText-Regular", sans-serif;
+
+      }
+
+      .bot {
         float: left;
+        background-color: var(--left-color);
+        color: #4b4f56;
       }
 
-      span.customer {
+      .customer {
         float: right;
+        color: white;
         background-color: var(--right-color);
       }
 
-      span.system {
+      .system {
         float: left;
         background-color: var(--system-color);
       }
 
-      span.bot-chat {
+      .bot-chat {
         float: left;
         background-color: var(--left-color);
       }
 
-      span.bot:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -8px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid white;
-        // border-left: 8px solid var(--border-color);
-        z-index: 101;
-      }
+      // span.bot:after {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -8px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid white;
+      //   border-left: 8px solid var(--border-color);
+      //   z-index: 101;
+      // }
 
-      span.bot:before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -9px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--border-color);
-        z-index: 100;
-      }
+      // span.bot:before {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -9px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--border-color);
+      //   z-index: 100;
+      // }
 
-      span.system:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -8px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--system-color);
-      }
+      // span.system:after {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -8px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--system-color);
+      // }
 
-      span.system:before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -9px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--border-color);
-      }
+      // span.system:before {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -9px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--border-color);
+      // }
 
-      span.bot-chat:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -8.5px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--left-color);
-      }
+      // span.bot-chat:after {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -8.5px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--left-color);
+      // }
 
-      span.bot-chat:before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -9px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--border-color);
-      }
+      // span.bot-chat:before {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -9px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--border-color);
+      // }
 
-      span.customer:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        right: -8px;
-        top: 6px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left: 8px solid var(--right-color);
-      }
+      // span.customer:after {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   right: -8px;
+      //   top: 6px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-left: 8px solid var(--right-color);
+      // }
 
-      span.customer:before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        right: -9px;
-        top: 6px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left: 8px solid var(--border-color);
-      }
+      // span.customer:before {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   right: -9px;
+      //   top: 6px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-left: 8px solid var(--border-color);
+      // }
 
       span.agent-chat {
         float: left;
         background-color: var(--left-color);
       }
 
-      span.agent:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -8px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid white;
-        // border-left: 8px solid var(--border-color);
-        z-index: 101;
-      }
+      // span.agent:after {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -8px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid white;
+      //   // border-left: 8px solid var(--border-color);
+      //   z-index: 101;
+      // }
 
-      span.agent:before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: -9px;
-        top: 7px;
-        height: 0px;
-        width: 0px;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 8px solid var(--border-color);
-        z-index: 100;
-      }
+      // span.agent:before {
+      //   content: "";
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: -9px;
+      //   top: 7px;
+      //   height: 0px;
+      //   width: 0px;
+      //   border-top: 8px solid transparent;
+      //   border-bottom: 8px solid transparent;
+      //   border-right: 8px solid var(--border-color);
+      //   z-index: 100;
+      // }
     }
   }
 }
