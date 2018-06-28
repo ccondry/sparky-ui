@@ -5,13 +5,15 @@ import request from 'superagent'
 const state = {
   messages: [],
   sessionId: null,
-  sessionBody: {}
+  sessionBody: {},
+  intervalRef: null
 }
 
 const getters = {
   messages: state => state.messages,
   sessionId: state => state.sessionId,
-  sessionBody: state => state.sessionBody
+  sessionBody: state => state.sessionBody,
+  intervalRef: state => state.intervalRef
 }
 
 const mutations = {
@@ -29,10 +31,20 @@ const mutations = {
   },
   [types.SET_SESSION_BODY] (state, data) {
     state.sessionBody = data
+  },
+  [types.SET_INTERVAL_REFERENCE] (state, data) {
+    // make sure the old is cleared
+    clearInterval(state.intervalRef)
+    // save the new one
+    state.intervalRef = data
   }
 }
 
 const actions = {
+  saveIntervalRef ({dispatch, commit}, body) {
+    // store body
+    commit(types.SET_INTERVAL_REFERENCE, body)
+  },
   setSessionBody ({commit}, body) {
     // store body
     commit(types.SET_SESSION_BODY, body)
@@ -67,7 +79,6 @@ const actions = {
       const response = await request
       .get(uri)
       .query(query)
-
       // console.log('get messages response', response)
       commit(types.SET_MESSAGES, response.body)
       // dispatch('addMessage', {
@@ -77,9 +88,10 @@ const actions = {
     } catch (e) {
       console.error(e)
       console.log('e.status', e.status)
-      // invalid session - get new session
+      // invalid session - stop the interval
       if (e.status === 400) {
-        dispatch('getSession')
+        clearInterval(getters.intervalRef)
+        // dispatch('getSession')
       }
     }
   },

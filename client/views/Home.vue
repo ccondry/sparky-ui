@@ -60,7 +60,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['addMessage', 'getMessages']),
+    ...mapActions(['addMessage', 'getMessages', 'saveIntervalRef']),
     submit (e) {
       console.log(e)
       if (e.ctrlKey) {
@@ -111,8 +111,8 @@ export default {
     sessionId (val, oldVal) {
       console.log('sessionId changed:', val)
       if (val && !oldVal) {
-        // start getMessages loop
-        this.interval = setInterval(this.getMessages, 2000)
+        // start getMessages loop, and save reference in state
+        this.saveIntervalRef(setInterval(this.getMessages, 2000))
       }
     }
   }
