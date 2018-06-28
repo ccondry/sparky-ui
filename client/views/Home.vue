@@ -102,7 +102,7 @@ export default {
           // }
           case 'mortgage-calculator': {
             // open calculator
-            window.open('http://static.cxdemo.net/documents/sparky/calculator.html', 'calculator', 'location=1,status=1,scrollbars=1,width=400,height=800')
+            window.open('http://mm-static.cxdemo.net/calculator.html', 'calculator', 'location=1,status=1,scrollbars=1,width=400,height=800')
             break
           }
         }
