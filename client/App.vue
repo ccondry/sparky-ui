@@ -98,6 +98,7 @@ export default {
         // logo: this.$route.query.logo,
         apiAiToken: this.$route.query.apiAiToken,
         bot: this.$route.query.bot,
+        botEnabled: this.$route.query.botEnabled !== 'false',
         visitId: this.$route.query.visitId
       })
     },
