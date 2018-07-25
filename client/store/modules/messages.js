@@ -49,6 +49,7 @@ const actions = {
     // store body
     commit(types.SET_SESSION_BODY, body)
   },
+  // get a new chat session from the sparky-api server
   async getSession ({dispatch, commit, getters}) {
     try {
       const uri = `${getters.apiBase}/sparky/session`
