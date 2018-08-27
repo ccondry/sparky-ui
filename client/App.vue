@@ -77,6 +77,22 @@ export default {
     this.email = this.$route.query.email
     this.phone = this.$route.query.phone
 
+    // check for ECE-style parameters
+    if (this.$route.query.fieldname_1) {
+      const names = this.$route.query.fieldname_1.split(' ')
+      this.firstName = names.shift()
+      this.lastName = names.join(' ')
+    }
+    if (this.$route.query.fieldname_2) {
+      this.email = this.$route.query.fieldname_2
+    }
+    if (this.$route.query.fieldname_3) {
+      this.phone = this.$route.query.fieldname_3
+    }
+    // if (this.$route.query.fieldname_4) {
+    //   this.message = this.$route.query.fieldname_4
+    // }
+
     // check that form is filled
     if (this.firstName && this.firstName.length && this.lastName && this.lastName.length && this.email && this.email.length && this.phone && this.phone.length) {
       // start the session
