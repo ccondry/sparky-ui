@@ -4,7 +4,7 @@ const path = require('path')
 const config = require('../config')
 const utils = require('./utils')
 const projectRoot = path.resolve(__dirname, '../')
-const Dotenv = require('dotenv-webpack')
+// const Dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: {
@@ -88,9 +88,9 @@ module.exports = {
     hints: false
   },
   plugins: [
-    new Dotenv({
-      path: './.env', // Path to .env file (this is the default)
-      safe: true // load .env.example (defaults to "false" which does not use dotenv-safe)
-    })
+    // new Dotenv({
+    //   path: './.env', // Path to .env file (this is the default)
+    //   safe: true // load .env.example (defaults to "false" which does not use dotenv-safe)
+    // })
   ]
 }
