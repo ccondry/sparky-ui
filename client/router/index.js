@@ -15,16 +15,6 @@ export default new Router({
       name: 'Home',
       path: '/',
       component: require('../views/home')
-    },
-    {
-      name: 'Brand Select',
-      path: '/:language',
-      component: require('../views/brand-select')
-    },
-    {
-      name: 'Brand',
-      path: '/:language/:brand',
-      component: require('../views/brand')
     }
   ]
 })
