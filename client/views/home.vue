@@ -24,9 +24,10 @@
               <textarea class="input"
               ref="textinput"
               v-model="input"
-              style="min-height: 3em; width:100%;"
+              style="min-height: 1em; width:82%;"
               placeholder="Type a message..."
               @keypress.enter.exact.prevent="submit"></textarea>
+              <button class="button is-success" @click.prevent="submit">Send</button>
             </form>
           </div>
         </article>
