@@ -61,6 +61,7 @@ export default {
       lastName: '',
       email: '',
       phone: '',
+      username: null,
       connecting: false
     }
   },
@@ -76,6 +77,7 @@ export default {
     this.lastName = this.$route.query.lastName
     this.email = this.$route.query.email
     this.phone = this.$route.query.phone
+    this.username = this.$route.query.username
 
     // check for ECE-style parameters
     if (this.$route.query.fieldname_1) {
@@ -106,6 +108,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
+        username: this.username,
         phone: this.phone,
         dcloudSession: this.$route.query.session,
         dcloudDatacenter: this.$route.query.datacenter,
