@@ -8,6 +8,12 @@ export const switchEffect = ({ commit }, data) => {
 }
 
 export const loadToState = async function ({getters, commit, dispatch}, options) {
+  if (!options.mutation) {
+    const message = 'error during loadToState ' + options.name + ' - options.mutation was undefined. Verify that the mutation type constant is in mutation-types.js'
+    console.log(message)
+    return
+    // throw Error(message)
+  }
   try {
     const response = await load(getters, options.path, options.query)
     console.log(`GET ${options.name}`, response)
