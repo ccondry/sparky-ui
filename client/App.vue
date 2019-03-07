@@ -78,6 +78,7 @@ export default {
     this.email = this.$route.query.email
     this.phone = this.$route.query.phone
     this.username = this.$route.query.username
+    this.expanded = this.$route.query.expanded === 'true'
 
     // check for ECE-style parameters
     if (this.$route.query.fieldname_1) {
@@ -99,6 +100,11 @@ export default {
     if (this.firstName && this.firstName.length && this.email && this.email.length && this.phone && this.phone.length) {
       // start the session
       this.startSession()
+    }
+    // expand the view to full window height?
+    if (expanded) {
+      // decrease default buffer to make the UI fit the entire height of window
+      window.document.documentElement.style.setProperty('--buffer', '77px')
     }
   },
   methods: {
@@ -152,6 +158,11 @@ export default {
 
 $fa-font-path: '~font-awesome/fonts/';
 @import '~font-awesome/scss/font-awesome';
+
+:root {
+  // make the height of the window smaller to fix view on mobile
+  --buffer: 200px;
+}
 
 html {
   background-color: whitesmoke;
