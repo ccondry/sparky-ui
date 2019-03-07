@@ -104,9 +104,9 @@ export default {
     }
     // expand the view to full window height?
     if (this.expand) {
-      console.log('expanded view set to true. setting --buffer CSS var to 77px.')
+      console.log('expanded view set to true. setting --buffer CSS var to 67px.')
       // decrease default buffer to make the UI fit the entire height of window
-      window.document.documentElement.style.setProperty('--buffer', '77px')
+      window.document.documentElement.style.setProperty('--buffer', '67px')
     } else {
       console.log('expanded view set to false. leaving --buffer CSS var to 200px.')
     }
