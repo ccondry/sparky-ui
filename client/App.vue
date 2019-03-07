@@ -78,7 +78,7 @@ export default {
     this.email = this.$route.query.email
     this.phone = this.$route.query.phone
     this.username = this.$route.query.username
-    this.expanded = this.$route.query.expanded === 'true'
+    this.expand = this.$route.query.expand === 'true'
 
     // check for ECE-style parameters
     if (this.$route.query.fieldname_1) {
@@ -102,7 +102,7 @@ export default {
       this.startSession()
     }
     // expand the view to full window height?
-    if (expanded) {
+    if (expand) {
       // decrease default buffer to make the UI fit the entire height of window
       window.document.documentElement.style.setProperty('--buffer', '77px')
     }
