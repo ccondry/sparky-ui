@@ -62,7 +62,8 @@ export default {
       email: '',
       phone: '',
       username: null,
-      connecting: false
+      connecting: false,
+      expand: false
     }
   },
   components: {
@@ -102,7 +103,7 @@ export default {
       this.startSession()
     }
     // expand the view to full window height?
-    if (expand) {
+    if (this.expand) {
       // decrease default buffer to make the UI fit the entire height of window
       window.document.documentElement.style.setProperty('--buffer', '77px')
     }
