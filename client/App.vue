@@ -128,7 +128,8 @@ export default {
         apiAiToken: this.$route.query.apiAiToken,
         bot: this.$route.query.bot,
         botEnabled: this.$route.query.botEnabled !== 'false',
-        visitId: this.$route.query.visitId
+        visitId: this.$route.query.visitId,
+        userId: this.$route.query.userId
       })
     },
     submit () {
