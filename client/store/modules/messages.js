@@ -41,6 +41,10 @@ const mutations = {
 }
 
 const actions = {
+  addWsMessage ({dispatch, commit, getters}, data) {
+    console.log('addWsMessage', data)
+    commit(types.ADD_MESSAGE, data)
+  },
   saveIntervalRef ({dispatch, commit}, body) {
     // store body
     commit(types.SET_INTERVAL_REFERENCE, body)
@@ -96,17 +100,23 @@ const actions = {
       }
     }
   },
-  async addMessage ({commit, getters}, data) {
+  async addMessage ({commit, getters, rootState}, data) {
     try {
-      const uri = `${getters.apiBase}/sparky/messages`
-      const response = await request
-      .post(uri)
-      .send({
-        text: data.text,
-        sessionId: getters.sessionId
-      })
+      // const uri = `${getters.apiBase}/sparky/messages`
+      // const response = await request
+      // .post(uri)
+      // .send({
+      //   text: data.text,
+      //   sessionId: getters.sessionId
+      // })
+      //
+      // console.log('add message response', response)
 
-      console.log('add message response', response)
+      // send message to websocket
+      rootState.socket.send(JSON.stringify({
+        sessionId: getters.sessionId,
+        text: data.text
+      }))
       // add the message to the local store so that it shows immediately
       commit(types.ADD_MESSAGE, {
         text: data.text,

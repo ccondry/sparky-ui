@@ -57,11 +57,17 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'messages', 'sessionId'
+      'messages',
+      'sessionId',
+      'socket'
     ])
   },
   methods: {
-    ...mapActions(['addMessage', 'getMessages', 'saveIntervalRef']),
+    ...mapActions([
+      'addMessage',
+      'getMessages',
+      'saveIntervalRef'
+    ]),
     submit (e) {
       console.log(e)
       if (e.ctrlKey) {
@@ -112,8 +118,17 @@ export default {
     sessionId (val, oldVal) {
       console.log('sessionId changed:', val)
       if (val && !oldVal) {
-        // start getMessages loop, and save reference in state
-        this.saveIntervalRef(setInterval(this.getMessages, 2000))
+        // got a new session ID - send the initial websocket message to start
+        console.log('new session ID:', val)
+        // receiving websocket messages
+        console.log('sending websocket message to register this session ID.')
+        // Send an initial message
+        this.socket.send(JSON.stringify({
+          sessionId: val
+        }))
+
+        // To close the socket....
+        // this.socket.close()
       }
     }
   }
