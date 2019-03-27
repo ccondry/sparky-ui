@@ -15,8 +15,7 @@ if (loc.protocol === 'https:') {
 } else {
   wsAddress = 'ws:'
 }
-wsAddress += '//' + loc.host
-wsAddress += loc.pathname + '/to/ws'
+wsAddress += '//' + loc.host + '/api/v1'
 
 // Create a socket instance
 const socket = new window.WebSocket(wsAddress)
