@@ -8,7 +8,16 @@ import * as types from './mutation-types'
 
 Vue.use(Vuex)
 
-const wsAddress = 'ws://localhost:3020'
+let loc = window.location
+let wsAddress
+if (loc.protocol === 'https:') {
+  wsAddress = 'wss:'
+} else {
+  wsAddress = 'ws:'
+}
+wsAddress += '//' + loc.host
+wsAddress += loc.pathname + '/to/ws'
+
 // Create a socket instance
 const socket = new window.WebSocket(wsAddress)
 
