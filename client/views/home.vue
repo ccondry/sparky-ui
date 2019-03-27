@@ -112,6 +112,16 @@ export default {
             window.open('http://mm-static.cxdemo.net/calculator.html', 'calculator', 'location=1,status=1,scrollbars=1,width=400,height=800')
             break
           }
+          case 'change-brand-url': {
+            console.log('received change-brand-url command with data =', message.data)
+            // change branding page background iframe url
+            // send message to container, assuming this page is an iframe
+            window.parent.postMessage({
+              type: 'sparky.command',
+              command: 'change-brand-url',
+              data: message.data,
+            }, 'https://mm-chat.cxdemo.net')
+          }
         }
       }
     },
