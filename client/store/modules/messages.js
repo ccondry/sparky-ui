@@ -71,8 +71,6 @@ const actions = {
       const response = await request.post(uri).send(getters.sessionBody)
       console.log('get session response', response)
       commit(types.SET_SESSION_ID, response.body.sessionId)
-      // connect the web socket now
-      dispatch('connectWebSocket')
     } catch (e) {
       console.log(e)
     }

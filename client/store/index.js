@@ -26,7 +26,8 @@ const store = new Vuex.Store({
     pkg,
     loading: true,
     wsAddress,
-    socket: null
+    socket: null,
+    socketOpen: false
   },
   mutations
 })

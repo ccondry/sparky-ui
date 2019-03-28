@@ -59,14 +59,16 @@ export default {
     ...mapGetters([
       'messages',
       'sessionId',
-      'socket'
+      'socket',
+      'socketOpen'
     ])
   },
   methods: {
     ...mapActions([
       'addMessage',
       'getMessages',
-      'saveIntervalRef'
+      'saveIntervalRef',
+      'connectWebSocket'
     ]),
     submit (e) {
       console.log(e)
@@ -132,13 +134,18 @@ export default {
         console.log('new session ID:', val)
         // receiving websocket messages
         console.log('sending websocket message to register this session ID.')
-        // Send an initial message
+        // connect the web socket now
+        this.connectWebSocket()
+        // To close the socket....
+        // this.socket.close()
+      }
+    },
+    socketOpen (val) {
+      if (val === true) {
+        // socket is opened - send an initial message
         this.socket.send(JSON.stringify({
           sessionId: val
         }))
-
-        // To close the socket....
-        // this.socket.close()
       }
     }
   }

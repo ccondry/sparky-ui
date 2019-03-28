@@ -8,6 +8,8 @@ export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
   // Open the socket
   socket.onopen = function (event) {
     console.log('websocket open to', getters.wsAddress)
+    // set open in state
+    commit(types.SET_WEB_SOCKET_OPEN, true)
   }
 
   // Listen for messages
@@ -20,6 +22,8 @@ export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
   // Listen for socket close
   socket.onclose = function (event) {
     console.log('websocket closed:', event)
+    // mark socket closed
+    commit(types.SET_WEB_SOCKET_OPEN, false)
     // store.dispatch('addWsMessage', {
     //   text: 'Your chat session has ended.',
     //   type: 'system'
