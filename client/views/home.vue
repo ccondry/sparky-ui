@@ -4,6 +4,7 @@
       <div class="tile is-parent is-4 is-hidden-mobile"></div>
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
+          <!-- messages -->
           <div id="messages" class="messages">
             <ul>
               <li v-if="messages.length === 0">
@@ -19,6 +20,14 @@
               <li id="last-message"></li>
             </ul>
           </div>
+          <!-- typing indicator -->
+          <div>
+            <span v-show="typingIndicator" id="typing-indicator">
+              {{ typingIndicatorFrom }} is typing...
+            </span>
+            &nbsp;
+          </div>
+          <!-- chat input area -->
           <div class="input-box">
             <form>
               <textarea class="input"
@@ -60,7 +69,9 @@ export default {
       'messages',
       'sessionId',
       'socket',
-      'socketOpen'
+      'socketOpen',
+      'typingIndicator',
+      'typingIndicatorFrom'
     ])
   },
   methods: {
@@ -158,6 +169,11 @@ export default {
   --right-color: rgb(64, 128, 255);
   --system-color: #f1f0f0;
   --border-color: grey;
+}
+
+#typing-indicator {
+  font-size: 0.6em;
+  color: grey;
 }
 
 .input-box {

@@ -6,14 +6,18 @@ const state = {
   messages: [],
   sessionId: null,
   sessionBody: {},
-  intervalRef: null
+  intervalRef: null,
+  typingIndicator: false,
+  typingIndicatorFrom: ''
 }
 
 const getters = {
   messages: state => state.messages,
   sessionId: state => state.sessionId,
   sessionBody: state => state.sessionBody,
-  intervalRef: state => state.intervalRef
+  intervalRef: state => state.intervalRef,
+  typingIndicator: state => state.typingIndicator,
+  typingIndicatorFrom: state => state.typingIndicatorFrom
 }
 
 const mutations = {
@@ -37,13 +41,26 @@ const mutations = {
     clearInterval(state.intervalRef)
     // save the new one
     state.intervalRef = data
+  },
+  [types.SET_TYPING_INDICATOR] (state, data) {
+    state.typingIndicator = data.value
+    state.typingIndicatorFrom = data.from
   }
 }
 
 const actions = {
   addWsMessage ({dispatch, commit, getters}, data) {
     console.log('addWsMessage', data)
-    commit(types.ADD_MESSAGE, data)
+    // if there is a message with any text in it, add it to the state
+    if (data.text) {
+      commit(types.ADD_MESSAGE, data)
+    }
+    if (data.type === 'onTypingStart') {
+      commit(types.SET_TYPING_INDICATOR, {value: true, from: data.data.from})
+    }
+    if (data.type === 'onTypingStop') {
+      commit(types.SET_TYPING_INDICATOR, {value: false, from: data.data.from})
+    }
   },
   saveIntervalRef ({dispatch, commit}, body) {
     // store body
