@@ -31,8 +31,10 @@ export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
         type: 'system'
       })
     } else if (event.code === 1006) {
-      // reconnect the web socket
-      dispatch('connectWebSocket')
+      // reconnect the web socket in a moment
+      setTimeout(function () {
+        dispatch('connectWebSocket')
+      }, 1000)
     }
   }
   commit(types.SET_WEB_SOCKET, socket)
