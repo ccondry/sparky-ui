@@ -24,12 +24,16 @@ export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
     console.log('websocket closed:', event)
     // mark socket closed
     commit(types.SET_WEB_SOCKET_OPEN, false)
-    // store.dispatch('addWsMessage', {
-    //   text: 'Your chat session has ended.',
-    //   type: 'system'
-    // })
-    // reconnect the web socket
-    dispatch('connectWebSocket')
+    if (event.code === 1005) {
+      // don't reconnect
+      dispatch('addWsMessage', {
+        text: 'Your chat session has ended.',
+        type: 'system'
+      })
+    } else if (event.code === 1006) {
+      // reconnect the web socket
+      dispatch('connectWebSocket')
+    }
   }
   commit(types.SET_WEB_SOCKET, socket)
 }
