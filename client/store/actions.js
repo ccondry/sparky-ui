@@ -1,20 +1,20 @@
 import * as types from './mutation-types'
 import { load, put, post } from '../utils'
 
-export const connectWebSocket = ({ commit, rootState, getters }) => {
+export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
   // Create a socket instance
   const socket = new window.WebSocket(getters.wsAddress)
 
   // Open the socket
   socket.onopen = function (event) {
-    console.log('websocket open to', wsAddress)
+    console.log('websocket open to', getters.wsAddress)
   }
 
   // Listen for messages
   socket.onmessage = function (event) {
     console.log('websocket received a message:', event.data)
     // dispatch message to store it in state
-    store.dispatch('addWsMessage', JSON.parse(event.data))
+    dispatch('addWsMessage', JSON.parse(event.data))
   }
 
   // Listen for socket close

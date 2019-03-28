@@ -119,7 +119,7 @@ export default {
             window.parent.postMessage({
               type: 'sparky.command',
               command: 'change-brand-url',
-              data: message.data,
+              data: message.data
             }, 'https://mm-brand.cxdemo.net')
           }
         }

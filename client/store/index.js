@@ -5,7 +5,6 @@ import * as actions from './actions'
 import * as getters from './getters'
 import mutations from './mutations'
 import modules from './modules'
-import * as types from './mutation-types'
 
 Vue.use(Vuex)
 
