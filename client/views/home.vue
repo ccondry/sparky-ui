@@ -120,7 +120,7 @@ export default {
               type: 'sparky.command',
               command: 'change-brand-url',
               data: message.data,
-            }, 'https://mm-chat.cxdemo.net')
+            }, 'https://mm-brand.cxdemo.net')
           }
         }
       }
