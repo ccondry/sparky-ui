@@ -6,3 +6,4 @@ export const loading = state => state.loading
 // web socket connection
 export const socket = state => state.socket
 export const wsAddress = state => state.wsAddress
+export const socketOpen = state => state.socketOpen
