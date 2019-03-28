@@ -144,7 +144,7 @@ export default {
       if (val === true) {
         // socket is opened - send an initial message
         this.socket.send(JSON.stringify({
-          sessionId: val
+          sessionId: this.sessionId
         }))
       }
     }
