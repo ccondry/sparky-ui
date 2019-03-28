@@ -33,6 +33,7 @@ const store = new Vuex.Store({
   state: {
     pkg,
     loading: true,
+    wsAddress,
     socket
   },
   mutations: {
