@@ -25,13 +25,15 @@ export const connectWebSocket = ({ commit, dispatch, rootState, getters }) => {
     // mark socket closed
     commit(types.SET_WEB_SOCKET_OPEN, false)
     if (event.code === 1005) {
-      // don't reconnect
+      // server closed connection due to expired session - don't reconnect
       dispatch('addWsMessage', {
         text: 'Your chat session has ended.',
         type: 'system'
       })
     } else if (event.code === 1006) {
-      // reconnect the web socket in a moment
+      // web socket disconnected due to network interference or sparky-api
+      // service restarting.
+      // reconnect the web socket in a moment.
       setTimeout(function () {
         dispatch('connectWebSocket')
       }, 1000)
