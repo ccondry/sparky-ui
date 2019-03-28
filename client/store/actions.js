@@ -1,6 +1,35 @@
 import * as types from './mutation-types'
 import { load, put, post } from '../utils'
 
+export const connectWebSocket = ({ commit, rootState, getters }) => {
+  // Create a socket instance
+  const socket = new window.WebSocket(getters.wsAddress)
+
+  // Open the socket
+  socket.onopen = function (event) {
+    console.log('websocket open to', wsAddress)
+  }
+
+  // Listen for messages
+  socket.onmessage = function (event) {
+    console.log('websocket received a message:', event.data)
+    // dispatch message to store it in state
+    store.dispatch('addWsMessage', JSON.parse(event.data))
+  }
+
+  // Listen for socket close
+  socket.onclose = function (event) {
+    console.log('websocket closed:', event)
+    // store.dispatch('addWsMessage', {
+    //   text: 'Your chat session has ended.',
+    //   type: 'system'
+    // })
+    // reconnect the web socket
+    dispatch('connectWebSocket')
+  }
+  commit(types.SET_WEB_SOCKET, socket)
+}
+
 export const switchEffect = ({ commit }, data) => {
   if (data) {
     commit(types.SWITCH_EFFECT, data)
